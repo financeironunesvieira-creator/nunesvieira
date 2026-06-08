@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Nunes Vieira & Cia Ltda — 40 anos fornecendo peças agrícolas e industriais em Itapetininga-SP.">
+<title>Nunes Vieira & Cia — Peças Agrícolas e Industriais</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════ */
+:root {
+  --navy:      #003399;
+  --navy-dk:   #0D1B4B;
+  --navy-lt:   #1a4dcc;
+  --gold:      #C9A227;
+  --gold-lt:   #E4B94A;
+  --gold-btn:  #E8941A;   /* laranja quente como MR Costa */
+  --gold-btn-h:#d07d10;
+  --white:     #FFFFFF;
+  --bg:        #F7F7F7;
+  --search-bg: #EEEEF8;   /* lilás claro como MR Costa */
+  --gray-lt:   #E8E8E8;
+  --gray-md:   #888888;
+  --gray-dk:   #333333;
+  --danger:    #CC1111;
+  --success:   #1A7A3C;
+  --r:         4px;
+  --r-md:      8px;
+  --sh:        0 1px 4px rgba(0,0,0,.10);
+  --sh-md:     0 2px 12px rgba(0,0,0,.13);
+  --sh-lg:     0 4px 24px rgba(0,0,0,.16);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--gray-dk);font-size:14px;line-height:1.5}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
+button{cursor:pointer;font-family:inherit;border:none;background:none}
+input,select{font-family:inherit}
+
+/* ═══════════════════════════════════════
+   HEADER MOBILE
+═══════════════════════════════════════ */
+.site-header{
+  background:var(--white);
+  position:sticky;top:0;z-index:200;
+  border-bottom:1px solid var(--gray-lt);
+  box-shadow:var(--sh);
+}
+.hdr-main{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px;height:58px;
+}
+.hdr-logo{
+  position:absolute;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;
+  text-decoration:none;
+}
+.hdr-logo-text{
+  font-family:'Montserrat',sans-serif;
+  font-size:17px;font-weight:800;color:var(--navy);line-height:1;
+  letter-spacing:-.5px;
+}
+.hdr-logo-sub{
+  font-family:'Montserrat',sans-serif;
+  font-size:7px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gold-btn);margin-top:1px;
+}
+.hdr-logo-badge{
+  position:absolute;top:-4px;right:-28px;
+  background:var(--gold-btn);color:var(--white);
+  font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;
+  padding:2px 4px;border-radius:3px;letter-spacing:.04em;
+}
+.hdr-hamburger,.hdr-cart{
+  display:flex;align-items:center;justify-content:center;
+  width:38px;height:38px;
+  background:none;border:none;
+  color:var(--navy);font-size:22px;
+  border-radius:var(--r);
+  transition:background .15s;
+  position:relative;flex-shrink:0;
+}
+.hdr-hamburger:hover,.hdr-cart:hover{background:var(--bg)}
+.cart-badge{
+  position:absolute;top:2px;right:2px;
+  background:var(--gold-btn);color:var(--white);
+  font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;
+  min-width:16px;height:16px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 3px;
+  transition:transform .2s;
+}
+.cart-badge.bump{transform:scale(1.5)}
+
+/* Barra de busca */
+.hdr-search{
+  background:var(--search-bg);
+  padding:8px 16px;
+  border-bottom:1px solid var(--gray-lt);
+}
+.search-form{
+  display:flex;align-items:center;
+  background:var(--search-bg);
+  border-radius:var(--r-md);
+  overflow:hidden;
+  border:1.5px solid transparent;
+  transition:border-color .2s;
+}
+.search-form:focus-within{border-color:var(--gold-btn)}
+.search-input{
+  flex:1;height:40px;background:transparent;
+  border:none;outline:none;
+  padding:0 12px;
+  font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;
+  color:var(--navy);letter-spacing:.04em;text-transform:uppercase;
+}
+.search-input::placeholder{color:var(--navy);opacity:.6}
+.search-btn{
+  width:44px;height:40px;
+  background:none;border:none;
+  color:var(--gold-btn);font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+
+/* ═══════════════════════════════════════
+   MENU DRAWER (hamburger)
+═══════════════════════════════════════ */
+.menu-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.45);
+  z-index:300;opacity:0;pointer-events:none;
+  transition:opacity .28s;
+}
+.menu-overlay.open{opacity:1;pointer-events:auto}
+.menu-drawer{
+  position:fixed;top:0;left:0;bottom:0;
+  width:min(300px, 85vw);
+  background:var(--white);
+  z-index:310;
+  transform:translateX(-100%);
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;
+  overflow-y:auto;
+}
+.menu-drawer.open{transform:translateX(0)}
+
+.menu-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;
+  border-bottom:1px solid var(--gray-lt);
+  flex-shrink:0;
+}
+.menu-title{
+  display:flex;align-items:center;gap:10px;
+  font-family:'Montserrat',sans-serif;
+  font-size:14px;font-weight:700;color:var(--navy);
+}
+.menu-title-icon{color:var(--gold-btn);font-size:18px}
+.menu-close{
+  font-size:20px;color:var(--navy);
+  padding:4px;border-radius:50%;
+  transition:background .15s;
+}
+.menu-close:hover{background:var(--bg)}
+
+.menu-list{flex:1;padding:8px 0}
+.menu-cat{border-bottom:1px solid var(--gray-lt)}
+.menu-cat-btn{
+  width:100%;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;
+  font-family:'Open Sans',sans-serif;font-size:14px;font-weight:400;
+  color:var(--navy);background:none;border:none;
+  text-align:left;cursor:pointer;
+  transition:background .15s;
+}
+.menu-cat-btn:hover{background:var(--bg)}
+.menu-cat-btn.has-sub{font-weight:400}
+.menu-arrow{
+  font-size:12px;color:var(--gray-md);
+  transition:transform .22s;flex-shrink:0;
+}
+.menu-cat.open .menu-arrow{transform:rotate(180deg)}
+.menu-sub{
+  display:none;
+  background:var(--bg);
+  border-left:3px solid var(--gold-btn);
+  margin-left:0;
+}
+.menu-cat.open .menu-sub{display:block}
+.menu-sub a{
+  display:block;padding:10px 20px 10px 28px;
+  font-size:13px;color:var(--navy);
+  transition:background .15s;
+}
+.menu-sub a:hover{background:var(--gray-lt)}
+
+.menu-footer{
+  padding:16px 20px;
+  border-top:1px solid var(--gray-lt);
+  flex-shrink:0;
+}
+.menu-account{
+  display:flex;align-items:center;gap:12px;
+}
+.menu-account-icon{font-size:28px;color:var(--gold-btn)}
+.menu-account-title{
+  font-size:13px;font-weight:600;color:var(--navy);
+}
+.menu-account-sub{
+  font-size:12px;color:var(--gold-btn);font-weight:600;
+}
+
+/* ═══════════════════════════════════════
+   HERO / BANNER
+═══════════════════════════════════════ */
+.hero{
+  background:var(--navy);
+  padding:28px 16px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(45deg,rgba(255,255,255,.03) 0,rgba(255,255,255,.03) 1px,transparent 0,transparent 50%);
+  background-size:20px 20px;
+}
+.hero-eyebrow{
+  font-family:'Montserrat',sans-serif;
+  font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold-btn);margin-bottom:8px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';display:block;width:20px;height:1px;background:var(--gold-btn)}
+.hero-title{
+  font-family:'Montserrat',sans-serif;
+  font-size:24px;font-weight:800;color:var(--white);
+  line-height:1.15;margin-bottom:10px;
+}
+.hero-title span{color:var(--gold-btn)}
+.hero-sub{
+  font-size:13px;color:rgba(255,255,255,.88);
+  margin-bottom:20px;line-height:1.55;
+}
+.hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn-hero-primary{
+  height:44px;padding:0 24px;
+  background:var(--gold-btn);color:var(--white);
+  font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  border-radius:var(--r);border:none;
+  box-shadow:0 3px 10px rgba(232,148,26,.40);
+  transition:background .18s,transform .12s;
+}
+.btn-hero-primary:hover{background:var(--gold-btn-h);transform:translateY(-1px)}
+.btn-hero-ghost{
+  height:44px;padding:0 20px;
+  background:transparent;color:rgba(255,255,255,.85);
+  font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  border-radius:var(--r);border:1.5px solid rgba(255,255,255,.30);
+  transition:border-color .18s,background .18s;
+}
+.btn-hero-ghost:hover{border-color:rgba(255,255,255,.7);background:rgba(255,255,255,.08)}
+
+/* ═══════════════════════════════════════
+   BENEFÍCIOS
+═══════════════════════════════════════ */
+.benefits{
+  background:var(--white);
+  border-top:3px solid var(--gold-btn);
+  border-bottom:1px solid var(--gray-lt);
+}
+.benefits-scroll{
+  display:flex;overflow-x:auto;
+  scrollbar-width:none;
+  padding:0;
+}
+.benefits-scroll::-webkit-scrollbar{display:none}
+.benefit{
+  display:flex;align-items:center;gap:8px;
+  padding:12px 16px;
+  border-right:1px solid var(--gray-lt);
+  flex-shrink:0;min-width:160px;
+}
+.benefit-icon{font-size:20px;flex-shrink:0}
+.benefit-title{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:var(--navy)}
+.benefit-sub{font-size:10px;color:var(--gray-md)}
+
+/* ═══════════════════════════════════════
+   SEÇÕES
+═══════════════════════════════════════ */
+.section{padding:20px 16px 24px;background:#F7F7F7}
+.section-white{background:var(--white)}
+.section-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;
+}
+.section-title{
+  font-family:'Montserrat',sans-serif;
+  font-size:18px;font-weight:700;color:var(--navy);
+}
+.section-link{
+  font-family:'Montserrat',sans-serif;
+  font-size:11px;font-weight:600;color:var(--gold-btn);
+  letter-spacing:.04em;text-transform:uppercase;
+}
+
+/* ═══════════════════════════════════════
+   CARDS DE PRODUTO — layout MR Costa
+═══════════════════════════════════════ */
+.products-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.product-card{
+  background:var(--white);
+  border:1px solid var(--gray-lt);
+  border-radius:var(--r-md);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  transition:box-shadow .2s,transform .2s;
+  position:relative;
+}
+.product-card:hover{
+  box-shadow:var(--sh-md);
+  transform:translateY(-2px);
+}
+
+/* imagem */
+.card-img{
+  aspect-ratio:1/1;
+  background:var(--white);
+  display:flex;align-items:center;justify-content:center;
+  padding:16px;
+  position:relative;
+  overflow:hidden;
+}
+.card-img-placeholder{font-size:56px;opacity:.45;user-select:none;transition:transform .3s}
+.product-card:hover .card-img-placeholder{transform:scale(1.06)}
+.card-img img{width:100%;height:100%;object-fit:contain;transition:transform .3s}
+.product-card:hover .card-img img{transform:scale(1.04)}
+
+/* badge desconto */
+.badge-disc{
+  position:absolute;top:8px;left:8px;
+  background:var(--navy);color:var(--white);
+  font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;
+  padding:2px 7px;border-radius:3px;
+}
+
+/* corpo */
+.card-body{
+  padding:10px 10px 0;flex:1;display:flex;flex-direction:column;
+}
+.card-name{
+  font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;
+  color:var(--navy);line-height:1.35;text-transform:uppercase;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+  margin-bottom:8px;
+}
+.card-price-old{
+  font-size:11px;color:var(--gray-md);text-decoration:line-through;
+  font-weight:400;display:block;
+}
+.card-price{
+  font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;
+  color:var(--navy);line-height:1;display:block;margin:2px 0;
+}
+.card-install{
+  font-size:11px;color:var(--gold-btn);line-height:1.3;
+  display:block;margin-top:2px;
+}
+.card-install strong{font-weight:700}
+
+/* botão VER PRODUTO */
+.card-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:100%;height:42px;margin-top:10px;
+  background:var(--gold-btn);color:var(--white);
+  font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  border:none;border-radius:0 0 var(--r-md) var(--r-md);
+  transition:background .18s;
+}
+.card-btn:hover{background:var(--gold-btn-h)}
+.card-btn.added{background:var(--success)}
+.card-btn.out-of-stock{background:var(--gray-md);cursor:not-allowed}
+
+/* ═══════════════════════════════════════
+   CATEGORIAS
+═══════════════════════════════════════ */
+.cats-scroll{
+  display:flex;gap:10px;
+  overflow-x:auto;scrollbar-width:none;
+  padding-bottom:4px;
+}
+.cats-scroll::-webkit-scrollbar{display:none}
+.cat-chip{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:var(--white);border:1px solid var(--gray-lt);
+  border-radius:var(--r-md);padding:14px 12px;
+  min-width:90px;flex-shrink:0;
+  font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;
+  color:var(--navy);text-align:center;text-transform:uppercase;letter-spacing:.04em;
+  transition:border-color .15s,box-shadow .15s,transform .15s;
+  cursor:pointer;
+}
+.cat-chip:hover{border-color:var(--gold-btn);box-shadow:0 2px 8px rgba(232,148,26,.20);transform:translateY(-2px)}
+.cat-chip.active{border-color:var(--gold-btn);background:rgba(232,148,26,.06)}
+.cat-icon{font-size:28px}
+
+/* ═══════════════════════════════════════
+   BANNER PROMO
+═══════════════════════════════════════ */
+.promo-banner{
+  margin:0 16px 20px;
+  background:var(--navy);border-radius:var(--r-md);
+  padding:20px;
+  position:relative;overflow:hidden;
+}
+.promo-banner::after{
+  content:'40';position:absolute;right:-10px;bottom:-20px;
+  font-family:'Montserrat',sans-serif;font-size:120px;font-weight:900;
+  color:rgba(255,255,255,.05);line-height:1;pointer-events:none;
+}
+.promo-tag{
+  font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold-btn);margin-bottom:6px;
+}
+.promo-title{
+  font-family:'Montserrat',sans-serif;font-size:18px;font-weight:800;
+  color:var(--white);margin-bottom:6px;line-height:1.2;
+}
+.promo-sub{font-size:12px;color:rgba(255,255,255,.85);margin-bottom:14px}
+.promo-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  height:38px;padding:0 18px;
+  background:var(--gold-btn);color:var(--white);
+  font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  border-radius:var(--r);border:none;
+  transition:background .18s;
+}
+.promo-btn:hover{background:var(--gold-btn-h)}
+
+/* ═══════════════════════════════════════
+   SELOS DE CONFIANÇA
+═══════════════════════════════════════ */
+.trust-bar{
+  background:var(--white);
+  border-top:1px solid var(--gray-lt);
+  border-bottom:1px solid var(--gray-lt);
+  padding:16px;
+}
+.trust-items{display:flex;flex-direction:column;gap:10px}
+.trust-item{
+  display:flex;align-items:center;gap:10px;
+  font-size:12px;font-weight:600;color:var(--navy);
+}
+.trust-icon{font-size:18px;flex-shrink:0;width:24px;text-align:center}
+
+/* ═══════════════════════════════════════
+   NEWSLETTER
+═══════════════════════════════════════ */
+.newsletter{
+  background:var(--navy);
+  padding:24px 16px;
+  border-top:3px solid var(--gold-btn);
+}
+.nl-title{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:800;color:var(--white);margin-bottom:4px}
+.nl-sub{font-size:12px;color:rgba(255,255,255,.82);margin-bottom:14px}
+.nl-form{display:flex;height:44px;border-radius:var(--r);overflow:hidden}
+.nl-input{
+  flex:1;background:rgba(255,255,255,.12);
+  border:1.5px solid rgba(255,255,255,.20);border-right:none;
+  border-radius:var(--r) 0 0 var(--r);
+  padding:0 14px;font-family:'Open Sans',sans-serif;font-size:13px;
+  color:var(--white);outline:none;
+  transition:border-color .2s;
+}
+.nl-input::placeholder{color:rgba(255,255,255,.60)}
+.nl-input:focus{border-color:var(--gold-btn)}
+.nl-btn{
+  width:100px;background:var(--gold-btn);color:var(--white);
+  font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;
+  border:none;border-radius:0 var(--r) var(--r) 0;
+  transition:background .18s;
+  flex-shrink:0;
+}
+.nl-btn:hover{background:var(--gold-btn-h)}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+.footer{
+  background:var(--navy-dk);
+  padding:24px 16px 80px;
+  border-top:3px solid var(--gold-btn);
+}
+.footer-logo{
+  font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;
+  color:var(--white);margin-bottom:4px;
+}
+.footer-logo span{color:var(--gold-btn)}
+.footer-tagline{font-size:12px;color:rgba(255,255,255,.80);margin-bottom:20px}
+.footer-section{margin-bottom:20px}
+.footer-section-title{
+  font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold-btn);margin-bottom:10px;
+  padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.18);
+}
+.footer-links a{
+  display:block;font-size:13px;color:rgba(255,255,255,.80);
+  margin-bottom:7px;transition:color .15s;
+}
+.footer-links a:hover{color:rgba(255,255,255,.90)}
+.footer-contact li{
+  font-size:12px;color:rgba(255,255,255,.85);
+  margin-bottom:8px;display:flex;align-items:flex-start;gap:8px;
+}
+.footer-contact .ci{font-size:14px;flex-shrink:0;margin-top:1px}
+.footer-contact a{color:var(--gold-btn)}
+.pay-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.pay-chip{
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);
+  border-radius:3px;padding:4px 8px;
+  font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;
+  color:rgba(255,255,255,.90);letter-spacing:.04em;
+}
+.footer-bottom{
+  margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.20);
+  font-size:11px;color:rgba(255,255,255,.75);text-align:center;
+}
+
+/* ═══════════════════════════════════════
+   BOTTOM NAV MOBILE
+═══════════════════════════════════════ */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--white);
+  border-top:1px solid var(--gray-lt);
+  display:flex;z-index:100;
+  box-shadow:0 -2px 12px rgba(0,0,0,.10);
+}
+.bnav-item{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:8px 0;gap:3px;
+  font-family:'Montserrat',sans-serif;font-size:9px;font-weight:600;
+  color:var(--gray-md);letter-spacing:.04em;text-transform:uppercase;
+  cursor:pointer;transition:color .15s;
+  position:relative;
+}
+.bnav-item.active,.bnav-item:hover{color:var(--navy)}
+.bnav-item.active .bnav-icon{color:var(--gold-btn)}
+.bnav-icon{font-size:20px}
+.bnav-badge{
+  position:absolute;top:6px;right:calc(50% - 18px);
+  background:var(--gold-btn);color:var(--white);
+  font-size:9px;font-weight:700;
+  min-width:16px;height:16px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 3px;
+}
+
+/* ═══════════════════════════════════════
+   CARRINHO DRAWER
+═══════════════════════════════════════ */
+.cart-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.50);
+  z-index:400;opacity:0;pointer-events:none;transition:opacity .28s;
+}
+.cart-overlay.open{opacity:1;pointer-events:auto}
+.cart-drawer{
+  position:fixed;top:0;right:0;bottom:0;
+  width:min(340px,92vw);background:var(--white);
+  z-index:410;
+  transform:translateX(100%);
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;
+}
+.cart-drawer.open{transform:translateX(0)}
+.cart-hdr{
+  background:var(--navy);padding:16px;
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+.cart-hdr-title{
+  font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:var(--white);
+  display:flex;align-items:center;gap:8px;
+}
+.cart-close{
+  width:30px;height:30px;background:rgba(255,255,255,.15);
+  border:none;border-radius:50%;color:var(--white);font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background .15s;
+}
+.cart-close:hover{background:rgba(255,255,255,.28)}
+.cart-body{flex:1;overflow-y:auto;padding:12px}
+.cart-empty{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:10px;height:200px;
+  color:var(--gray-md);text-align:center;
+}
+.cart-empty-icon{font-size:48px;opacity:.35}
+.cart-empty-text{font-size:13px;font-weight:600;color:var(--navy)}
+.cart-item{
+  display:flex;gap:10px;padding:12px 0;
+  border-bottom:1px solid var(--gray-lt);align-items:flex-start;
+}
+.cart-item-img{
+  width:54px;height:54px;flex-shrink:0;
+  background:var(--bg);border:1px solid var(--gray-lt);
+  border-radius:var(--r);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;overflow:hidden;
+}
+.cart-item-img img{width:100%;height:100%;object-fit:contain}
+.cart-item-info{flex:1;min-width:0}
+.cart-item-name{
+  font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;
+  color:var(--navy);text-transform:uppercase;line-height:1.3;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.cart-item-price{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:800;color:var(--navy);margin-top:4px}
+.qty-row{display:flex;align-items:center;gap:8px;margin-top:6px}
+.qty-btn{
+  width:26px;height:26px;border:1.5px solid var(--gray-lt);
+  border-radius:var(--r);background:none;font-size:16px;font-weight:700;
+  color:var(--navy);display:flex;align-items:center;justify-content:center;
+  transition:border-color .15s,background .15s;
+}
+.qty-btn:hover{border-color:var(--navy);background:var(--bg)}
+.qty-val{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:var(--navy);min-width:20px;text-align:center}
+.cart-item-del{
+  background:none;border:none;color:var(--gray-md);font-size:16px;
+  padding:2px;transition:color .15s;flex-shrink:0;margin-top:2px;
+}
+.cart-item-del:hover{color:var(--danger)}
+.cart-foot{
+  padding:14px;border-top:2px solid var(--gold-btn);flex-shrink:0;
+}
+.cart-total-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.cart-total-label{font-size:12px;color:var(--gray-md)}
+.cart-total-val{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:var(--navy)}
+.btn-checkout{
+  width:100%;height:48px;background:var(--gold-btn);color:var(--white);
+  font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  border:none;border-radius:var(--r-md);
+  box-shadow:0 3px 10px rgba(232,148,26,.35);
+  transition:background .18s,transform .12s;
+}
+.btn-checkout:hover{background:var(--gold-btn-h);transform:translateY(-1px)}
+.cart-note{font-size:11px;color:var(--gray-md);text-align:center;margin-top:8px;font-weight:600}
+
+/* ═══════════════════════════════════════
+   PÁGINA DE PRODUTO (PDP)
+═══════════════════════════════════════ */
+#pdp-page{display:none}
+
+.pdp-gallery{background:var(--white);padding:16px}
+.pdp-main-img{
+  aspect-ratio:1/1;border:1px solid var(--gray-lt);
+  border-radius:var(--r-md);
+  display:flex;align-items:center;justify-content:center;
+  background:var(--white);overflow:hidden;margin-bottom:10px;
+  padding:20px;
+}
+.pdp-main-img img,.pdp-main-img .placeholder{
+  width:100%;height:100%;object-fit:contain;font-size:80px;
+  display:flex;align-items:center;justify-content:center;opacity:.55;
+}
+.pdp-thumbs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.pdp-thumbs::-webkit-scrollbar{display:none}
+.pdp-thumb{
+  width:64px;height:64px;flex-shrink:0;
+  border:2px solid var(--gray-lt);border-radius:var(--r);
+  background:var(--white);padding:6px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:border-color .15s;overflow:hidden;
+}
+.pdp-thumb.active{border-color:var(--navy)}
+.pdp-thumb:hover{border-color:var(--gold-btn)}
+.pdp-thumb img{width:100%;height:100%;object-fit:contain}
+.pdp-thumb-placeholder{font-size:28px;opacity:.5}
+
+.pdp-info{background:var(--white);margin-top:8px;padding:20px 16px}
+.pdp-ref{font-size:11px;color:var(--gray-md);margin-bottom:6px}
+.pdp-ref strong{color:var(--gray-dk)}
+.pdp-name{
+  font-family:'Montserrat',sans-serif;font-size:18px;font-weight:800;
+  color:var(--navy);text-transform:uppercase;line-height:1.2;
+  margin-bottom:12px;
+}
+.pdp-stars{display:flex;align-items:center;gap:4px;margin-bottom:16px}
+.stars{color:var(--gold-btn);font-size:16px;letter-spacing:1px}
+.stars-empty{color:var(--gray-lt)}
+.pdp-rate-text{font-size:12px;color:var(--gold-btn)}
+
+.pdp-price-old{font-size:13px;color:var(--gray-md);text-decoration:line-through;display:block}
+.pdp-price{font-family:'Montserrat',sans-serif;font-size:32px;font-weight:800;color:var(--navy);display:block;line-height:1;margin:4px 0}
+.pdp-install{font-size:13px;color:var(--gold-btn);display:block;margin-bottom:20px}
+
+.btn-comprar{
+  width:100%;height:52px;
+  background:var(--gold-btn);color:var(--white);
+  font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:.10em;text-transform:uppercase;
+  border:none;border-radius:var(--r-md);
+  box-shadow:0 3px 12px rgba(232,148,26,.40);
+  margin-bottom:10px;
+  transition:background .18s,transform .12s;
+}
+.btn-comprar:hover{background:var(--gold-btn-h);transform:translateY(-1px)}
+
+.pdp-frete{
+  margin-top:16px;background:var(--bg);
+  border-radius:var(--r-md);padding:14px;
+  border:1px solid var(--gray-lt);
+}
+.pdp-frete-title{
+  display:flex;align-items:center;gap:8px;
+  font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;
+  color:var(--navy);margin-bottom:10px;
+}
+.pdp-frete-title .fi{color:var(--navy);font-size:18px}
+.frete-form{display:flex;height:40px;gap:0}
+.frete-input{
+  flex:1;border:1.5px solid var(--gray-lt);border-right:none;
+  border-radius:var(--r) 0 0 var(--r);
+  padding:0 12px;font-family:'Montserrat',sans-serif;font-size:13px;
+  font-weight:600;color:var(--navy);
+  outline:none;transition:border-color .2s;
+  background:var(--white);
+}
+.frete-input:focus{border-color:var(--gold-btn)}
+.frete-btn{
+  width:90px;background:none;border:1.5px solid var(--gray-lt);
+  border-left:none;border-radius:0 var(--r) var(--r) 0;
+  font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--navy);
+  transition:background .15s,color .15s;
+}
+.frete-btn:hover{background:var(--navy);color:var(--white);border-color:var(--navy)}
+.frete-result{display:none;margin-top:10px}
+.frete-table{width:100%;border-collapse:collapse;font-size:12px}
+.frete-table th{
+  background:var(--navy);color:var(--white);
+  font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  padding:8px 10px;text-align:left;font-size:10px;
+}
+.frete-table td{padding:8px 10px;border-bottom:1px solid var(--gray-lt)}
+.frete-table tr:last-child td{border-bottom:none}
+.frete-table tr:nth-child(even) td{background:var(--bg)}
+.frete-carrier{display:flex;align-items:center;gap:8px}
+.carrier-icon{font-size:18px}
+
+.pdp-desc{background:var(--white);margin-top:8px;padding:20px 16px}
+.pdp-desc-title{
+  font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;
+  color:var(--navy);margin-bottom:12px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.pdp-desc-title .arrow{color:var(--gray-md);font-size:14px}
+.pdp-desc-text{font-size:13px;line-height:1.7;color:var(--gray-dk)}
+.pdp-desc-text p{margin-bottom:10px}
+.pdp-desc-text strong{color:var(--navy)}
+.pdp-specs{margin-top:16px}
+.pdp-specs-title{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:10px}
+.specs-list{list-style:none}
+.specs-list li{
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:13px;padding:5px 0;
+  border-bottom:1px solid var(--gray-lt);
+}
+.specs-list li:last-child{border-bottom:none}
+.specs-list .sk{font-weight:700;color:var(--navy);min-width:110px;flex-shrink:0}
+.specs-list .sv{color:var(--gray-dk)}
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+.toast-wrap{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:600;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:90%;max-width:320px}
+.toast{
+  background:var(--navy);color:var(--white);
+  padding:11px 16px;border-radius:var(--r-md);
+  font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;
+  border-left:3px solid var(--gold-btn);
+  box-shadow:0 4px 16px rgba(0,0,0,.20);
+  width:100%;text-align:center;
+  transform:translateY(20px);opacity:0;
+  transition:transform .28s,opacity .28s;
+}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* ═══════════════════════════════════════
+   UTILS / ANIM
+═══════════════════════════════════════ */
+.wpp-float{
+  position:fixed;bottom:74px;right:16px;z-index:150;
+  width:50px;height:50px;border-radius:50%;
+  background:#25D366;color:var(--white);font-size:26px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(37,211,102,.45);
+  animation:ppulse 2.5s ease-in-out infinite;
+  text-decoration:none;
+}
+@keyframes ppulse{0%,100%{box-shadow:0 4px 16px rgba(37,211,102,.45)}50%{box-shadow:0 4px 28px rgba(37,211,102,.70)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<!-- ════ HEADER ════ -->
+<header class="site-header" id="site-header">
+  <div class="hdr-main">
+    <button class="hdr-hamburger" onclick="toggleMenu()" aria-label="Menu">☰</button>
+    <a href="#" class="hdr-logo" onclick="showHome()">
+      <div class="hdr-logo-text">NUNES VIEIRA</div>
+      <div class="hdr-logo-sub">Peças Agrícolas & Industriais</div>
+      <span class="hdr-logo-badge">40 anos</span>
+    </a>
+    <button class="hdr-cart" onclick="toggleCart()" aria-label="Carrinho">
+      🛒
+      <span class="cart-badge" id="cart-badge">0</span>
+    </button>
+  </div>
+  <div class="hdr-search">
+    <form class="search-form" onsubmit="doSearch(event)">
+      <input class="search-input" id="search-input" type="text"
+             placeholder="O QUE DESEJA PROCURAR?" autocomplete="off">
+      <button class="search-btn" type="submit" aria-label="Buscar">🔍</button>
+    </form>
+  </div>
+</header>
+
+<!-- ════ MENU DRAWER ════ -->
+<div class="menu-overlay" id="menu-overlay" onclick="toggleMenu()"></div>
+<aside class="menu-drawer" id="menu-drawer" aria-label="Menu de categorias">
+  <div class="menu-hdr">
+    <div class="menu-title">
+      <span class="menu-title-icon">☰</span> Menu
+    </div>
+    <button class="menu-close" onclick="toggleMenu()">✕</button>
+  </div>
+  <ul class="menu-list" id="menu-list">
+    <!-- Gerado pelo JS -->
+  </ul>
+  <div class="menu-footer">
+    <div class="menu-account">
+      <span class="menu-account-icon">👤</span>
+      <div>
+        <div class="menu-account-title">Minha Conta</div>
+        <div class="menu-account-sub">Entrar / Cadastrar</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ════ HOME PAGE ════ -->
+<div id="home-page">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-eyebrow">40 Anos de Tradição</div>
+    <h1 class="hero-title">Peças <span>Agrícolas</span><br>& Industriais</h1>
+    <p class="hero-sub">Mangueiras, rolamentos, correntes e conexões.<br>Itapetininga-SP.</p>
+    <div class="hero-btns">
+      <button class="btn-hero-primary" onclick="document.getElementById('mais-vendidos').scrollIntoView({behavior:'smooth'})">Ver Produtos</button>
+      <a class="btn-hero-ghost" href="https://api.whatsapp.com/send?phone=5515XXXXXXXXX" target="_blank">💬 Orçamento</a>
+    </div>
+  </section>
+
+  <!-- Benefícios -->
+  <div class="benefits">
+    <div class="benefits-scroll">
+      <div class="benefit"><span class="benefit-icon">🚚</span><div><div class="benefit-title">Frete Grátis</div><div class="benefit-sub">acima de R$ 299</div></div></div>
+      <div class="benefit"><span class="benefit-icon">🔒</span><div><div class="benefit-title">Compra Segura</div><div class="benefit-sub">site protegido SSL</div></div></div>
+      <div class="benefit"><span class="benefit-icon">↩️</span><div><div class="benefit-title">30 dias troca</div><div class="benefit-sub">garantia no produto</div></div></div>
+      <div class="benefit"><span class="benefit-icon">💳</span><div><div class="benefit-title">12x sem juros</div><div class="benefit-sub">no cartão</div></div></div>
+      <div class="benefit"><span class="benefit-icon">📞</span><div><div class="benefit-title">(15) 3472-1412</div><div class="benefit-sub">seg–sex 8h–18h</div></div></div>
+    </div>
+  </div>
+
+  <!-- Categorias -->
+  <section class="section section-white">
+    <div class="section-hdr">
+      <h2 class="section-title">Categorias</h2>
+      <a class="section-link" href="#">Ver todas</a>
+    </div>
+    <div class="cats-scroll" id="cats-scroll"></div>
+  </section>
+
+  <!-- Mais Vendidos -->
+  <section class="section" id="mais-vendidos" style="background:#F7F7F7">
+    <div class="section-hdr">
+      <h2 class="section-title">Mais Vendidos</h2>
+      <a class="section-link" href="#">Ver tudo</a>
+    </div>
+    <div class="products-grid" id="grid-mv"></div>
+  </section>
+
+  <!-- Banner 40 anos -->
+  <div class="promo-banner">
+    <div class="promo-tag">Nossa História</div>
+    <div class="promo-title">40 Anos<br>Servindo quem produz</div>
+    <div class="promo-sub">Desde 1985 em Itapetininga-SP</div>
+    <a class="promo-btn" href="https://api.whatsapp.com/send?phone=5515XXXXXXXXX" target="_blank">
+      💬 Falar com especialista
+    </a>
+  </div>
+
+  <!-- Destaques -->
+  <section class="section section-white" style="background:#FFFFFF">
+    <div class="section-hdr">
+      <h2 class="section-title">Destaques</h2>
+      <a class="section-link" href="#">Ver tudo</a>
+    </div>
+    <div class="products-grid" id="grid-dest"></div>
+  </section>
+
+  <!-- Confiança -->
+  <div class="trust-bar">
+    <div class="trust-items">
+      <div class="trust-item"><span class="trust-icon">🏆</span>40 anos de experiência</div>
+      <div class="trust-item"><span class="trust-icon">📋</span>Nota fiscal em todas as compras</div>
+      <div class="trust-item"><span class="trust-icon">🚀</span>Entrega expressa para SP</div>
+      <div class="trust-item"><span class="trust-icon">🤝</span>Suporte técnico especializado</div>
+    </div>
+  </div>
+
+  <!-- Newsletter -->
+  <div class="newsletter">
+    <div class="nl-title">Receba Ofertas Exclusivas</div>
+    <div class="nl-sub">Promoções, lançamentos e dicas técnicas</div>
+    <form class="nl-form" onsubmit="subscribeNl(event)">
+      <input class="nl-input" type="email" placeholder="Seu melhor e-mail" required>
+      <button class="nl-btn" type="submit">Cadastrar</button>
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-logo">NUNES <span>VIEIRA</span></div>
+    <div class="footer-tagline">Peças Agrícolas & Industriais — 40 anos</div>
+
+    <div class="footer-section">
+      <div class="footer-section-title">Atendimento</div>
+      <ul class="footer-contact">
+        <li><span class="ci">📞</span><span><a href="tel:+551534721412">(15) 3472-1412</a></span></li>
+        <li><span class="ci">💬</span><span><a href="https://api.whatsapp.com/send?phone=5515XXXXXXXXX" target="_blank">WhatsApp</a></span></li>
+        <li><span class="ci">📍</span><span>Itapetininga – SP</span></li>
+        <li><span class="ci">🕐</span><span>Seg–Sex: 8h–18h | Sáb: 8h–12h</span></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <div class="footer-section-title">Institucional</div>
+      <div class="footer-links">
+        <a href="#">Sobre a Nunes Vieira</a>
+        <a href="#">Política de Privacidade</a>
+        <a href="#">Trocas e Devoluções</a>
+        <a href="admin.html">Área Administrativa</a>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <div class="footer-section-title">Pagamento</div>
+      <div class="pay-chips">
+        <span class="pay-chip">PIX</span>
+        <span class="pay-chip">Boleto</span>
+        <span class="pay-chip">Visa</span>
+        <span class="pay-chip">Master</span>
+        <span class="pay-chip">Elo</span>
+        <span class="pay-chip">Amex</span>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © 2025 Nunes Vieira & Cia Ltda. Todos os direitos reservados.<br>
+      CNPJ: 56.123.433/0001-99
+    </div>
+  </footer>
+
+</div><!-- /home-page -->
+
+<!-- ════ PDP PAGE ════ -->
+<div id="pdp-page">
+  <div class="pdp-gallery">
+    <div class="pdp-main-img" id="pdp-main-img">
+      <div class="placeholder" id="pdp-placeholder" style="font-size:100px;opacity:.4"></div>
+    </div>
+    <div class="pdp-thumbs" id="pdp-thumbs"></div>
+  </div>
+
+  <div class="pdp-info">
+    <div class="pdp-ref">REF: <strong id="pdp-sku"></strong></div>
+    <h1 class="pdp-name" id="pdp-name"></h1>
+    <div class="pdp-stars">
+      <span class="stars">☆☆☆☆☆</span>
+      <span class="pdp-rate-text">Seja o primeiro a opinar</span>
+    </div>
+    <span class="pdp-price-old" id="pdp-old"></span>
+    <span class="pdp-price" id="pdp-price"></span>
+    <span class="pdp-install" id="pdp-install"></span>
+
+    <button class="btn-comprar" id="btn-comprar">COMPRAR PRODUTO</button>
+
+    <!-- Calculadora de frete -->
+    <div class="pdp-frete">
+      <div class="pdp-frete-title">
+        <span class="fi">🚚</span> Frete e prazo de entrega
+      </div>
+      <div class="frete-form">
+        <input class="frete-input" id="frete-cep" type="text" placeholder="18213-676"
+               maxlength="9" inputmode="numeric" oninput="maskCep(this)">
+        <button class="frete-btn" onclick="calcFrete()">CALCULAR</button>
+      </div>
+      <div class="frete-result" id="frete-result">
+        <table class="frete-table">
+          <thead><tr><th>Frete</th><th>Valor</th><th>Prazo</th></tr></thead>
+          <tbody id="frete-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Descrição / Specs -->
+  <div class="pdp-desc">
+    <div class="pdp-desc-title">
+      Descrição do Produto <span class="arrow">›</span>
+    </div>
+    <div class="pdp-desc-text" id="pdp-desc-text"></div>
+
+    <div class="pdp-specs" id="pdp-specs-wrap">
+      <div class="pdp-specs-title">Especificações Técnicas</div>
+      <ul class="specs-list" id="pdp-specs-list"></ul>
+    </div>
+  </div>
+
+  <!-- Relacionados -->
+  <section class="section section-white">
+    <div class="section-hdr"><h2 class="section-title">Relacionados</h2></div>
+    <div class="products-grid" id="grid-rel"></div>
+  </section>
+</div><!-- /pdp-page -->
+
+<!-- WhatsApp flutuante -->
+<a class="wpp-float" id="wpp-float"
+   href="https://api.whatsapp.com/send?phone=5515XXXXXXXXX&text=Olá! Vim pelo site da Nunes Vieira."
+   target="_blank" aria-label="WhatsApp">💬</a>
+
+<!-- Bottom Nav -->
+<nav class="bottom-nav">
+  <div class="bnav-item active" onclick="showHome()">
+    <span class="bnav-icon">🏠</span>Início
+  </div>
+  <div class="bnav-item" onclick="toggleMenu()">
+    <span class="bnav-icon">☰</span>Menu
+  </div>
+  <div class="bnav-item" onclick="doSearch(null,true)">
+    <span class="bnav-icon">🔍</span>Buscar
+  </div>
+  <div class="bnav-item" onclick="toggleCart()">
+    <span class="bnav-icon">🛒</span>Carrinho
+    <span class="bnav-badge" id="bnav-badge">0</span>
+  </div>
+</nav>
+
+<!-- Carrinho drawer -->
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+<aside class="cart-drawer" id="cart-drawer">
+  <div class="cart-hdr">
+    <div class="cart-hdr-title">🛒 Meu Carrinho</div>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-body" id="cart-body"></div>
+  <div class="cart-foot" id="cart-foot" style="display:none">
+    <div class="cart-total-row">
+      <span class="cart-total-label">Total</span>
+      <span class="cart-total-val" id="cart-total">R$ 0,00</span>
+    </div>
+    <button class="btn-checkout" onclick="checkout()">✅ FINALIZAR COMPRA</button>
+    <div class="cart-note">🔒 Pagamento seguro · 12x sem juros</div>
+  </div>
+</aside>
+
+<!-- Toasts -->
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+// ══════════════════════════════════════
+//  CATÁLOGO
+// ══════════════════════════════════════
+const CATALOG = [
+  {id:"1",sku:"ASA-40-1",name:"CORRENTE SIMPLES ASA 40-1 — PASSO 1/2\"",price:89.90,oldPrice:109.90,icon:"⛓️",category:"Correntes",discount:"-18%",hot:true,installments:"9x R$ 9,99 sem juros",outOfStock:false,desc:"Corrente agrícola/industrial passo 1/2\" norma ANSI. Fabricada em aço carbono tratado.",specs:[["Passo","12,70 mm"],["Carga ruptura","13.800 N"],["Norma","ANSI B29.1"],["Material","Aço carbono"],["Aplicação","Agrícola/industrial"]]},
+  {id:"2",sku:"ROL-6204-2RS",name:"ROLAMENTO 6204-2RS — 20X47X14MM",price:24.50,oldPrice:null,icon:"🔧",category:"Rolamentos",discount:null,hot:true,installments:"3x R$ 8,17 sem juros",outOfStock:false,desc:"Rolamento rígido de esferas, vedação dupla borracha (2RS). Alta durabilidade.",specs:[["ID","20 mm"],["OD","47 mm"],["Espessura","14 mm"],["Vedação","2RS (dupla)"],["Norma","ISO 15:2017"]]},
+  {id:"3",sku:"MH-3/4-R2-10M",name:"MANGUEIRA HIDRÁULICA 3/4\" SAE 100 R2 — ROLO 10M",price:189.90,oldPrice:229.00,icon:"🔴",category:"Mangueiras Hidráulicas",discount:"-17%",hot:false,installments:"12x R$ 15,83 sem juros",outOfStock:false,desc:"Mangueira hidráulica dupla trança de aço. Indicada para alta pressão.",specs:[["Diâmetro interno","3/4\" (19mm)"],["Pressão máx.","275 bar"],["Norma","SAE 100 R2"],["Comprimento","10 metros"],["Temperatura","-40°C a +100°C"]]},
+  {id:"4",sku:"CON-BSP-1/2",name:"CONEXÃO BSP 1/2\" MACHO — AÇO CARBONO",price:12.90,oldPrice:null,icon:"🔩",category:"Conexões Hidráulicas",discount:null,hot:false,installments:"2x R$ 6,45 sem juros",outOfStock:false,desc:"Conexão macho BSP 1/2\" em aço carbono zincado. Alta resistência à corrosão.",specs:[["Rosca","BSP 1/2\""],["Material","Aço carbono"],["Acabamento","Zincado"],["Pressão máx.","400 bar"]]},
+  {id:"5",sku:"KIT-MH-TRATOR",name:"KIT MANGUEIRA HIDRÁULICA TRATOR — COMPLETO",price:349.00,oldPrice:420.00,icon:"📦",category:"Kits e Combos",discount:"-17%",hot:true,installments:"12x R$ 29,08 sem juros",outOfStock:false,desc:"Kit completo para reposição das mangueiras hidráulicas de tratores de médio porte.",specs:[["Conteúdo","4 mangueiras + conexões"],["Compatibilidade","Tratores médio porte"],["Mangueiras","SAE 100 R2 1/2\""],["Conexões","BSP incluídas"]]},
+  {id:"6",sku:"COR-SPB-1500",name:"CORREIA SPB 1500 — ALTA RESISTÊNCIA",price:67.50,oldPrice:82.00,icon:"🔄",category:"Correias e Polias",discount:"-18%",hot:false,installments:"6x R$ 11,25 sem juros",outOfStock:false,desc:"Correia em V perfil SPB. Alta resistência a óleo, calor e abrasão.",specs:[["Perfil","SPB"],["Comp. externo","1500 mm"],["Comp. interno","1450 mm"],["Norma","DIN 7753"]]},
+  {id:"7",sku:"ROL-22208",name:"ROLAMENTO AUTOCOMPENSADOR ROLOS 22208 CK",price:198.00,oldPrice:null,icon:"🔧",category:"Rolamentos",discount:null,hot:false,installments:"12x R$ 16,50 sem juros",outOfStock:false,desc:"Rolamento autocompensador de rolos série 22000. Ideal para cargas pesadas.",specs:[["ID","40 mm"],["OD","80 mm"],["Espessura","23 mm"],["Tipo","CK (furo cônico)"],["Norma","ISO 15"]]},
+  {id:"8",sku:"ASA-50-2",name:"CORRENTE DUPLA ASA 50-2 — PASSO 5/8\"",price:145.00,oldPrice:169.90,icon:"⛓️",category:"Correntes",discount:"-15%",hot:true,installments:"12x R$ 12,08 sem juros",outOfStock:false,desc:"Corrente dupla industrial/agrícola passo 5/8\". Maior resistência para transmissão pesada.",specs:[["Passo","15,875 mm"],["Carga ruptura","43.600 N"],["Norma","ANSI B29.1"],["Tipo","Dupla (2 fileiras)"]]}
+];
+
+const CATEGORIES = [
+  {name:"Correntes",icon:"⛓️"},
+  {name:"Rolamentos",icon:"🔧"},
+  {name:"Mangueiras Hidráulicas",icon:"🔴"},
+  {name:"Conexões Hidráulicas",icon:"🔩"},
+  {name:"Correias e Polias",icon:"🔄"},
+  {name:"Kits e Combos",icon:"📦"},
+];
+
+const MENU_CATS = [
+  {name:"Correntes",subs:["Correntes Simples","Correntes Duplas","Correntes Triplas","Rodas Dentadas","Elos e Acessórios"]},
+  {name:"Rolamentos",subs:["Rígidos de Esferas","Autocompensadores","Cônico","Agulha","Combinados"]},
+  {name:"Mangueiras Hidráulicas",subs:["SAE 100 R1","SAE 100 R2","SAE 100 R4","Termoplásticas"]},
+  {name:"Conexões Hidráulicas",subs:["BSP","NPT","JIC","ORFS","Flanges"]},
+  {name:"Correias e Polias",subs:["Correias A","Correias B","Correias C","SPB / XPB","Polias"]},
+  {name:"Kits e Combos",subs:[]},
+  {name:"Rolamentos",subs:[]},
+  {name:"Fixadores",subs:[]},
+  {name:"Lubrificantes",subs:[]},
+  {name:"Abrasivos",subs:[]},
+  {name:"Produtos para Solda",subs:[]},
+  {name:"Diversos",subs:[]},
+];
+
+// ══════════════════════════════════════
+//  CARRINHO
+// ══════════════════════════════════════
+let cart = JSON.parse(localStorage.getItem('nv_cart2') || '[]');
+
+function saveCart() {
+  localStorage.setItem('nv_cart2', JSON.stringify(cart));
+  updateCartUI();
+}
+
+function addToCart(id) {
+  const p = CATALOG.find(x => String(x.id) === String(id));
+  if (!p || p.outOfStock) return;
+  const ex = cart.find(x => String(x.id) === String(id));
+  if (ex) ex.qty++;
+  else cart.push({...p, qty:1});
+  saveCart();
+  // feedback botão
+  const btn = document.getElementById('card-btn-'+id) || document.querySelector('[data-id="'+id+'"]');
+  if (btn) {
+    const orig = btn.textContent;
+    btn.classList.add('added');
+    btn.textContent = '✓ ADICIONADO!';
+    setTimeout(() => { btn.classList.remove('added'); btn.textContent = orig; }, 1800);
+  }
+  // bump badge
+  ['cart-badge','bnav-badge'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.classList.add('bump'); setTimeout(()=>el.classList.remove('bump'),300); }
+  });
+  toast('✅ ' + p.name.slice(0,30) + '... adicionado!');
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(x => String(x.id) !== String(id));
+  saveCart();
+}
+
+function changeQty(id, d) {
+  const item = cart.find(x => String(x.id) === String(id));
+  if (!item) return;
+  item.qty = Math.max(1, item.qty + d);
+  saveCart();
+}
+
+function updateCartUI() {
+  const count = cart.reduce((s,i) => s+i.qty, 0);
+  const total = cart.reduce((s,i) => s+i.price*i.qty, 0);
+  ['cart-badge','bnav-badge'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = count;
+  });
+  const totalEl = document.getElementById('cart-total');
+  if (totalEl) totalEl.textContent = 'R$ ' + total.toFixed(2).replace('.',',');
+  const foot = document.getElementById('cart-foot');
+  if (foot) foot.style.display = cart.length ? 'block' : 'none';
+  const body = document.getElementById('cart-body');
+  if (!body) return;
+  if (!cart.length) {
+    body.innerHTML = '<div class="cart-empty"><div class="cart-empty-icon">🛒</div><div class="cart-empty-text">Carrinho vazio</div><div style="font-size:12px;color:var(--gray-md)">Adicione produtos para continuar</div></div>';
+    return;
+  }
+  body.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-img">${item.foto && item.foto.includes('<img') ? item.foto : item.icon}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">R$ ${(item.price*item.qty).toFixed(2).replace('.',',')}</div>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="changeQty('${item.id}',-1)">−</button>
+          <span class="qty-val">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty('${item.id}',1)">+</button>
+        </div>
+      </div>
+      <button class="cart-item-del" onclick="removeFromCart('${item.id}')">✕</button>
+    </div>`).join('');
+}
+
+function toggleCart() {
+  const drawer = document.getElementById('cart-drawer');
+  const overlay = document.getElementById('cart-overlay');
+  const open = drawer.classList.toggle('open');
+  overlay.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+
+function checkout() {
+  if (!cart.length) return;
+  const total = cart.reduce((s,i) => s+i.price*i.qty, 0);
+  const lines = cart.map(i => `• ${i.name} (x${i.qty}) = R$ ${(i.price*i.qty).toFixed(2)}`).join('\n');
+  const msg = encodeURIComponent(`Olá! Gostaria de finalizar meu pedido:\n\n${lines}\n\n*Total: R$ ${total.toFixed(2)}*`);
+  window.open(`https://api.whatsapp.com/send?phone=5515XXXXXXXXX&text=${msg}`, '_blank');
+}
+
+// ══════════════════════════════════════
+//  RENDER
+// ══════════════════════════════════════
+function makeCard(p) {
+  const disc = p.discount ? '<span class="badge-disc">' + p.discount + '</span>' : '';
+  const old  = p.oldPrice ? '<span class="card-price-old">R$ ' + p.oldPrice.toFixed(2).replace('.',',') + '</span>' : '';
+  const oos  = p.outOfStock;
+  const price = 'R$ ' + p.price.toFixed(2).replace('.',',');
+  const btnCls = 'card-btn' + (oos ? ' out-of-stock' : '');
+  const btnTxt = oos ? '⛔ INDISPONÍVEL' : 'VER PRODUTO';
+  return '<div class="product-card" data-pdp="' + p.id + '">' +
+    '<div class="card-img">' +
+      disc +
+      '<div class="card-img-placeholder" style="font-size:56px;opacity:.45">' + p.icon + '</div>' +
+    '</div>' +
+    '<div class="card-body">' +
+      '<div class="card-name">' + p.name + '</div>' +
+      old +
+      '<span class="card-price">' + price + '</span>' +
+      '<span class="card-install">ou <strong>' + p.installments + '</strong></span>' +
+    '</div>' +
+    '<button class="' + btnCls + '" id="card-btn-' + p.id + '" data-cart="' + p.id + '">' +
+      btnTxt +
+    '</button>' +
+  '</div>';
+}
+
+function renderGrids() {
+  const mv   = CATALOG.filter(p => p.hot).slice(0,4);
+  const dest = CATALOG.filter(p => !p.hot).slice(0,4);
+  const gMv  = document.getElementById('grid-mv');
+  const gDst = document.getElementById('grid-dest');
+  if (gMv)  gMv.innerHTML  = mv.map(makeCard).join('');
+  if (gDst) gDst.innerHTML = dest.map(makeCard).join('');
+}
+
+function renderCats() {
+  const el = document.getElementById('cats-scroll');
+  if (!el) return;
+  el.innerHTML = CATEGORIES.map(c => `
+    <div class="cat-chip" onclick="filterCat('${c.name}')">
+      <span class="cat-icon">${c.icon}</span>${c.name}
+    </div>`).join('');
+}
+
+function renderMenu() {
+  const el = document.getElementById('menu-list');
+  if (!el) return;
+  el.innerHTML = MENU_CATS.map((c,i) => {
+    const hasSub = c.subs && c.subs.length > 0;
+    return `
+    <li class="menu-cat" id="mcat-${i}">
+      <button class="menu-cat-btn ${hasSub?'has-sub':''}"
+        onclick="${hasSub ? `toggleMenuCat(${i})` : `filterCat('${c.name}');toggleMenu()`}">
+        ${c.name}
+        ${hasSub ? '<span class="menu-arrow">⌄</span>' : ''}
+      </button>
+      ${hasSub ? `<div class="menu-sub">
+        <a href="#" onclick="filterCat('${c.name}');toggleMenu()">Ver ${c.name}</a>
+        ${c.subs.map(s=>`<a href="#" onclick="filterCat('${c.name}');toggleMenu()">${s}</a>`).join('')}
+      </div>` : ''}
+    </li>`;
+  }).join('');
+}
+
+function toggleMenuCat(i) {
+  const el = document.getElementById('mcat-'+i);
+  if (el) el.classList.toggle('open');
+}
+
+// ══════════════════════════════════════
+//  NAVEGAÇÃO
+// ══════════════════════════════════════
+let currentPdpId = null;
+
+function showHome() {
+  document.getElementById('home-page').style.display = 'block';
+  document.getElementById('pdp-page').style.display  = 'none';
+  window.scrollTo(0,0);
+}
+
+function showPdp(id) {
+  const p = CATALOG.find(x => String(x.id) === String(id));
+  if (!p) return;
+  currentPdpId = id;
+
+  // Preencher dados
+  document.getElementById('pdp-sku').textContent  = p.sku;
+  document.getElementById('pdp-name').textContent = p.name;
+  document.getElementById('pdp-placeholder').textContent = p.icon;
+
+  const oldEl = document.getElementById('pdp-old');
+  oldEl.textContent = p.oldPrice ? 'R$ ' + p.oldPrice.toFixed(2).replace('.',',') : '';
+  oldEl.style.display = p.oldPrice ? 'block' : 'none';
+
+  document.getElementById('pdp-price').textContent   = 'R$ ' + p.price.toFixed(2).replace('.',',');
+  document.getElementById('pdp-install').textContent = 'ou ' + p.installments;
+
+  // Botão comprar
+  const btnC = document.getElementById('btn-comprar');
+  btnC.onclick = () => { addToCart(id); toggleCart(); };
+  btnC.textContent = p.outOfStock ? '⛔ INDISPONÍVEL' : 'COMPRAR PRODUTO';
+  if (p.outOfStock) btnC.style.background = 'var(--gray-md)';
+  else btnC.style.background = '';
+
+  // Thumbnails (simuladas — mesma imagem 3x)
+  const thumbs = document.getElementById('pdp-thumbs');
+  thumbs.innerHTML = [1,2,3].map((n,i) => `
+    <div class="pdp-thumb ${i===0?'active':''}" onclick="selectThumb(this)">
+      <div class="pdp-thumb-placeholder">${p.icon}</div>
+    </div>`).join('');
+
+  // Descrição
+  const descEl = document.getElementById('pdp-desc-text');
+  descEl.innerHTML = `<p>${p.desc || 'Produto Nunes Vieira & Cia Ltda — qualidade garantida.'}</p>`;
+
+  // Specs
+  const specsList = document.getElementById('pdp-specs-list');
+  if (p.specs && p.specs.length) {
+    specsList.innerHTML = p.specs.map(([k,v]) =>
+      `<li><span class="sk">${k}</span><span class="sv">${v}</span></li>`
+    ).join('');
+    document.getElementById('pdp-specs-wrap').style.display = 'block';
+  } else {
+    document.getElementById('pdp-specs-wrap').style.display = 'none';
+  }
+
+  // Frete — limpar
+  document.getElementById('frete-result').style.display = 'none';
+  document.getElementById('frete-cep').value = '';
+
+  // Relacionados
+  const rel = CATALOG.filter(x => x.category === p.category && x.id !== p.id).slice(0,4);
+  document.getElementById('grid-rel').innerHTML = rel.map(makeCard).join('');
+
+  // Mostrar PDP
+  document.getElementById('home-page').style.display = 'none';
+  document.getElementById('pdp-page').style.display  = 'block';
+  window.scrollTo(0,0);
+}
+
+function selectThumb(el) {
+  document.querySelectorAll('.pdp-thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function filterCat(cat) {
+  const results = CATALOG.filter(p => p.category === cat);
+  showHome();
+  setTimeout(() => {
+    const sec = document.getElementById('mais-vendidos');
+    const titleEl = sec.querySelector('.section-title');
+    if (titleEl) titleEl.textContent = cat;
+    const grid = document.getElementById('grid-mv');
+    if (grid) grid.innerHTML = results.length
+      ? results.map(makeCard).join('')
+      : '<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--gray-md)">Nenhum produto nesta categoria</div>';
+    sec.scrollIntoView({behavior:'smooth'});
+  }, 50);
+}
+
+// ══════════════════════════════════════
+//  BUSCA
+// ══════════════════════════════════════
+function doSearch(e, focus) {
+  if (e) e.preventDefault();
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  if (focus && !q) {
+    document.getElementById('search-input').focus();
+    return;
+  }
+  if (!q) return;
+  const results = CATALOG.filter(p =>
+    p.name.toLowerCase().includes(q) ||
+    p.sku.toLowerCase().includes(q)  ||
+    p.category.toLowerCase().includes(q)
+  );
+  showHome();
+  setTimeout(() => {
+    const sec = document.getElementById('mais-vendidos');
+    sec.querySelector('.section-title').textContent = `Resultados: "${q}"`;
+    document.getElementById('grid-mv').innerHTML = results.length
+      ? results.map(makeCard).join('')
+      : `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--gray-md)">
+           <div style="font-size:40px;margin-bottom:10px">🔍</div>
+           <div style="font-weight:700;color:var(--navy);margin-bottom:6px">Nenhum resultado para "${q}"</div>
+           <div>Tente outro termo ou fale pelo WhatsApp</div>
+         </div>`;
+    sec.scrollIntoView({behavior:'smooth'});
+  },50);
+}
+
+// ══════════════════════════════════════
+//  MENU
+// ══════════════════════════════════════
+function toggleMenu() {
+  const drawer  = document.getElementById('menu-drawer');
+  const overlay = document.getElementById('menu-overlay');
+  const open = drawer.classList.toggle('open');
+  overlay.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+
+// ══════════════════════════════════════
+//  FRETE SIMULADO
+// ══════════════════════════════════════
+function maskCep(el) {
+  let v = el.value.replace(/\D/g,'').slice(0,8);
+  if (v.length > 5) v = v.slice(0,5) + '-' + v.slice(5);
+  el.value = v;
+}
+
+function calcFrete() {
+  const cep = document.getElementById('frete-cep').value.replace(/\D/g,'');
+  if (cep.length < 8) { toast('Digite o CEP completo (8 dígitos)', 'error'); return; }
+  const result = document.getElementById('frete-result');
+  const tbody  = document.getElementById('frete-tbody');
+
+  // Opção "Retire você mesmo"
+  const linhas = [
+    {carrier:'🏪', nome:'Retire você mesmo', valor:'GRÁTIS', prazo:'Após confirmação', info:'Rua Prof. Carlos Alberto A. Carvalho Pinto, 211 — Itapetininga SP'},
+    {carrier:'📮', nome:'Correios SEDEX', valor:'R$ 21,08', prazo:'2 dias úteis'},
+    {carrier:'📦', nome:'JADLOG .COM', valor:'R$ 20,09', prazo:'3 a 5 dias úteis'},
+    {carrier:'📦', nome:'JADLOG .PACKAGE', valor:'R$ 20,18', prazo:'4 a 6 dias úteis'},
+    {carrier:'📮', nome:'PAC Encomenda', valor:'R$ 18,50', prazo:'6 a 8 dias úteis'},
+  ];
+
+  tbody.innerHTML = linhas.map(l => `
+    <tr>
+      <td><div class="frete-carrier"><span class="carrier-icon">${l.carrier}</span>${l.nome}</div>
+          ${l.info ? `<div style="font-size:10px;color:var(--gray-md);margin-top:3px">${l.info}</div>` : ''}</td>
+      <td style="font-weight:700;color:${l.valor==='GRÁTIS'?'var(--success)':'var(--navy)'}">${l.valor}</td>
+      <td style="color:var(--gray-md)">${l.prazo}</td>
+    </tr>`).join('');
+
+  result.style.display = 'block';
+}
+
+// ══════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════
+function toast(msg, type) {
+  const wrap = document.getElementById('toast-wrap');
+  const el   = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = msg;
+  wrap.appendChild(el);
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
+  setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 350); }, 3000);
+}
+
+function subscribeNl(e) {
+  e.preventDefault();
+  toast('✅ Cadastrado com sucesso!');
+  e.target.reset();
+}
+
+// ══════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════
+renderGrids();
+renderCats();
+renderMenu();
+updateCartUI();
+
+// Event delegation para cards — sem onclick inline
+document.addEventListener('click', function(e) {
+  // Botão do carrinho
+  const cartBtn = e.target.closest('[data-cart]');
+  if (cartBtn) {
+    e.stopPropagation();
+    const id = cartBtn.dataset.cart;
+    if (!cartBtn.classList.contains('out-of-stock')) addToCart(id);
+    return;
+  }
+  // Card (abre PDP)
+  const card = e.target.closest('[data-pdp]');
+  if (card) {
+    showPdp(card.dataset.pdp);
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const cartDr = document.getElementById('cart-drawer');
+    const menuDr = document.getElementById('menu-drawer');
+    if (cartDr.classList.contains('open')) toggleCart();
+    if (menuDr.classList.contains('open')) toggleMenu();
+  }
+});
+</script>
+</body>
+</html>
