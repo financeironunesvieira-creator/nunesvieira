@@ -369,6 +369,27 @@ button{cursor:pointer;font-family:var(--font);border:none;background:none}
 @media(min-width:1024px){.products-grid{grid-template-columns:repeat(4,1fr)}.footer-cols{grid-template-columns:220px 1fr 1fr 1fr}.mainbar{padding:0 24px}.topbar .container{padding:0 24px}.navbar .container{padding:0 24px}}
 @media(max-width:479px){.topbar-info span:nth-child(2){display:none}.hero-btns }
 
+
+.cart-frete-section{padding:12px 0;border-top:1px solid var(--gray-lt)}
+.cart-frete-title{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.cart-cep-form{display:flex;height:38px;margin-bottom:10px}
+.cart-cep-input{flex:1;border:1.5px solid var(--gray-lt);border-right:none;border-radius:var(--r) 0 0 var(--r);padding:0 10px;font-family:var(--font);font-size:13px;font-weight:600;color:var(--navy);outline:none;background:var(--white);transition:border-color .2s}
+.cart-cep-input:focus{border-color:var(--gold)}
+.cart-cep-btn{width:80px;background:var(--navy);color:var(--white);border:none;border-radius:0 var(--r) var(--r) 0;font-family:var(--font);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background .15s}
+.cart-cep-btn:hover{background:var(--navy-md)}
+.cart-frete-opts{display:flex;flex-direction:column;gap:6px}
+.frete-opt{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1.5px solid var(--gray-lt);border-radius:var(--r);cursor:pointer;transition:border-color .15s,background .15s}
+.frete-opt:hover{border-color:var(--gold);background:rgba(201,162,39,.04)}
+.frete-opt.selected{border-color:var(--navy);background:rgba(13,27,75,.04)}
+.frete-opt input[type=radio]{accent-color:var(--navy);flex-shrink:0}
+.frete-opt-info{flex:1}
+.frete-opt-nome{font-size:12px;font-weight:700;color:var(--navy)}
+.frete-opt-prazo{font-size:11px;color:var(--gray-md)}
+.frete-opt-preco{font-size:14px;font-weight:800;color:var(--navy);flex-shrink:0}
+.frete-opt-preco.gratis{color:var(--success)}
+.cart-subtotal-row{display:flex;justify-content:space-between;font-size:12px;color:var(--gray-md);padding:4px 0}
+.cart-subtotal-row.frete{color:var(--navy-md)}
+
 </style>
 </head>
 <body>
@@ -761,13 +782,35 @@ button{cursor:pointer;font-family:var(--font);border:none;background:none}
   <div class="cart-hdr"><div class="cart-hdr-title">🛒 Meu Carrinho</div><button class="cart-close" onclick="toggleCart()">✕</button></div>
   <div class="cart-body" id="cart-body"></div>
   <div class="cart-foot" id="cart-foot" style="display:none">
-    <div class="cart-total-row"><span class="cart-total-label">Total</span><span class="cart-total-val" id="cart-total">R$ 0,00</span></div>
-    <button class="btn-checkout" onclick="checkout()">💳 FINALIZAR PEDIDO</button>
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <div style="flex:1;height:36px;background:var(--bg);border:1px solid var(--gray-lt);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gray-md);letter-spacing:.04em">💳 CARTÃO</div>
-      <div style="flex:1;height:36px;background:var(--bg);border:1px solid var(--gray-lt);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gray-md);letter-spacing:.04em">🔑 PIX</div>
-      <div style="flex:1;height:36px;background:var(--bg);border:1px solid var(--gray-lt);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gray-md);letter-spacing:.04em">📄 BOLETO</div>
+
+    <!-- SEÇÃO FRETE NO CARRINHO -->
+    <div class="cart-frete-section">
+      <div class="cart-frete-title">🚚 Calcular frete</div>
+      <div class="cart-cep-form">
+        <input class="cart-cep-input" id="cart-cep" type="text" placeholder="Digite seu CEP"
+               maxlength="9" inputmode="numeric" oninput="maskCartCep(this)">
+        <button class="cart-cep-btn" onclick="calcCartFrete()">CALCULAR</button>
+      </div>
+      <div id="cart-frete-opts" class="cart-frete-opts"></div>
     </div>
+
+    <!-- RESUMO DE VALORES -->
+    <div style="padding:8px 0;border-top:1px solid var(--gray-lt)">
+      <div class="cart-subtotal-row"><span>Subtotal</span><span id="cart-subtotal-val">R$ 0,00</span></div>
+      <div class="cart-subtotal-row frete" id="cart-frete-row" style="display:none">
+        <span id="cart-frete-label">Frete</span>
+        <span id="cart-frete-val">—</span>
+      </div>
+    </div>
+
+    <!-- TOTAL -->
+    <div class="cart-total-row">
+      <span class="cart-total-label">Total</span>
+      <span class="cart-total-val" id="cart-total">R$ 0,00</span>
+    </div>
+
+    <!-- BOTÃO CHECKOUT -->
+    <button class="btn-checkout" onclick="checkout()">💳 FINALIZAR PEDIDO</button>
     <div class="cart-note">🔒 Pagamento seguro · Cartão · PIX · Boleto</div>
   </div>
 </aside>
@@ -835,7 +878,7 @@ const MENU_CATS=[
 ];
 
 let cart=JSON.parse(localStorage.getItem('nv_cart3')||'[]');
-function saveCart(){localStorage.setItem('nv_cart3',JSON.stringify(cart));updateCartUI();}
+function saveCart(){localStorage.setItem('nv_cart3',JSON.stringify(cart));updateCartUI();updateCartTotals();}
 function addToCart(id){
  const p=CATALOG.find(x=>String(x.id)===String(id));
  if(!p||p.outOfStock)return;
@@ -861,6 +904,17 @@ function updateCartUI(){
 function toggleCart(){const d=document.getElementById('cart-drawer'),o=document.getElementById('cart-overlay');const op=d.classList.toggle('open');o.classList.toggle('open',op);document.body.style.overflow=op?'hidden':'';}
 
 async function checkout(){
+ if(!cart.length){toast('Adicione produtos ao carrinho!');return;}
+ if(!cartFreteSelected){
+   // Se não escolheu frete, scrollar para o campo de CEP
+   const cepInput = document.getElementById('cart-cep');
+   if(cepInput){
+     cepInput.focus();
+     cepInput.scrollIntoView({behavior:'smooth'});
+     toast('⚠️ Calcule e escolha o frete antes de finalizar');
+     return;
+   }
+ }
  if(!cart.length){toast('Adicione produtos ao carrinho!');return;}
  const btn=document.querySelector('.btn-checkout');if(btn){btn.textContent='⏳ Aguarde...';btn.disabled=true;}
  try{
@@ -988,6 +1042,41 @@ if(mpStatus==='aprovado'){const ref=urlParams.get('external_reference')||('PED-'
 else if(mpStatus==='falhou')setTimeout(()=>toast('❌ Pagamento não aprovado. Tente novamente.'),500);
 else if(mpStatus==='pendente')setTimeout(()=>toast('⏳ Pagamento pendente. Aguarde confirmação.'),500);
 window.addEventListener('scroll',()=>{const h=document.getElementById('hero-bg');if(h)h.style.transform='scale(1.05) translateY('+window.scrollY*.08+'px)';});
+
+let cartFreteSelected=null;
+function maskCartCep(el){let v=el.value.replace(/\D/g,'').slice(0,8);if(v.length>5)v=v.slice(0,5)+'-'+v.slice(5);el.value=v;}
+async function calcCartFrete(){
+  const rc=document.getElementById('cart-cep').value.replace(/\D/g,'');
+  if(rc.length<8){toast('Digite o CEP completo');return;}
+  const btn=document.querySelector('.cart-cep-btn'),optsEl=document.getElementById('cart-frete-opts');
+  if(btn){btn.textContent='...';btn.disabled=true;}
+  if(optsEl)optsEl.innerHTML='<div style="font-size:12px;color:var(--gray-md);padding:8px 0">Calculando...</div>';
+  const sub=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  function getTab(cep){const n=parseInt(cep.slice(0,2));let r=n>=13&&n<=19?'sp_int':(n>=1&&n<=9?'sp_cap':'outros');const t={sp_int:[{ico:'🏪',nome:'Retirar na loja',preco:0,prazo:'Imediato',gr:true},{ico:'📦',nome:'Jadlog Package',preco:18,prazo:'3-5 dias'},{ico:'📮',nome:'Correios PAC',preco:20,prazo:'4-6 dias'},{ico:'📮',nome:'SEDEX',preco:28,prazo:'1-2 dias'}],sp_cap:[{ico:'🏪',nome:'Retirar na loja',preco:0,prazo:'Imediato',gr:true},{ico:'📦',nome:'Jadlog .COM',preco:22,prazo:'2-3 dias'},{ico:'📮',nome:'Correios PAC',preco:24,prazo:'3-5 dias'},{ico:'📮',nome:'SEDEX',preco:35,prazo:'1 dia'}],outros:[{ico:'🏪',nome:'Retirar na loja',preco:0,prazo:'Imediato',gr:true},{ico:'📦',nome:'Jadlog Package',preco:28,prazo:'5-8 dias'},{ico:'📮',nome:'Correios PAC',preco:30,prazo:'6-10 dias'},{ico:'📮',nome:'SEDEX',preco:48,prazo:'2-4 dias'}]};return t[r].map(o=>({...o,preco:sub>=299&&!o.gr?0:o.preco,gr:o.gr||sub>=299}));}
+  function renderOpts(opts){cartFreteSelected=null;updateCartTotals();if(!optsEl)return;optsEl.innerHTML=opts.map((o,i)=>{const ps=o.gr||o.preco===0?'GRÁTIS':'R$ '+o.preco.toFixed(2).replace('.',',');const gc=o.gr||o.preco===0?'var(--success)':'var(--navy)';return '<label id="cfo'+i+'" style="display:flex;align-items:center;gap:10px;padding:9px 10px;border:1.5px solid var(--gray-lt);border-radius:8px;cursor:pointer;margin-bottom:5px;transition:all .15s" onclick="selFrete('+i+',\''+o.nome.replace(/'/g,"\\'")+'\','+o.preco+',\''+o.prazo+'\',\''+ps+'\')" ><input type="radio" name="cfr" value="'+i+'" style="accent-color:var(--navy);flex-shrink:0"><div style="flex:1"><div style="font-size:12px;font-weight:700;color:var(--navy)">'+o.ico+' '+o.nome+'</div><div style="font-size:11px;color:var(--gray-md)">'+o.prazo+'</div></div><div style="font-size:14px;font-weight:800;color:'+gc+'">'+ps+'</div></label>';}).join('');}
+  try{const resp=await fetch('https://nunesvieira.vercel.app/api/frete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({from:{postal_code:'18200000'},to:{postal_code:rc},products:[{id:'1',width:20,height:20,length:20,weight:1,insurance_value:Math.max(sub,50),quantity:1}],services:'1,2,3,4,7,8',options:{receipt:false,own_hand:false}})});if(!resp.ok)throw new Error();const data=await resp.json();const at=(Array.isArray(data)?data:[]).filter(s=>!s.error&&s.price);if(!at.length)throw new Error();renderOpts([{ico:'🏪',nome:'Retirar na loja (Itapetininga)',preco:0,prazo:'Imediato',gr:true},...at.sort((a,b)=>parseFloat(a.price)-parseFloat(b.price)).map(s=>({ico:s.company.name.includes('Correios')?'📮':'📦',nome:s.name,preco:sub>=299?0:parseFloat(s.price),prazo:(s.delivery_time||'?')+' dias úteis',gr:sub>=299}))]);}catch(e){renderOpts(getTab(rc));}finally{if(btn){btn.textContent='CALCULAR';btn.disabled=false;}}
+}
+function selFrete(i,nome,preco,prazo,ps){
+  cartFreteSelected={nome,preco,prazo,precoStr:ps};
+  document.querySelectorAll('[id^=cfo]').forEach((el,j)=>{
+    el.style.borderColor=j===i?'var(--navy)':'var(--gray-lt)';
+    el.style.background=j===i?'rgba(13,27,75,.05)':'';
+    const r=el.querySelector('input');if(r)r.checked=j===i;
+  });
+  updateCartTotals();
+}
+function updateCartTotals(){
+  const sub=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const fr=cartFreteSelected?cartFreteSelected.preco:0;
+  const sv=document.getElementById('cart-subtotal-val');if(sv)sv.textContent='R$ '+sub.toFixed(2).replace('.',',');
+  const fr_row=document.getElementById('cart-frete-row');
+  const fl=document.getElementById('cart-frete-label');
+  const fv=document.getElementById('cart-frete-val');
+  if(fr_row&&cartFreteSelected){fr_row.style.display='flex';if(fl)fl.textContent=cartFreteSelected.nome;if(fv)fv.textContent=cartFreteSelected.precoStr;}
+  else if(fr_row)fr_row.style.display='none';
+  const te=document.getElementById('cart-total');
+  if(te)te.textContent='R$ '+(sub+fr).toFixed(2).replace('.',',');
+}
 renderGrids();renderMenu();updateCartUI();initScrollAnimations();
 
 </script>
