@@ -267,36 +267,242 @@ button{cursor:pointer;font-family:var(--font);border:none;background:none}
 .menu-account-icon{font-size:26px;color:var(--gold)}
 .menu-account-title{font-size:13px;font-weight:600;color:var(--navy)}
 .menu-account-sub{font-size:12px;color:var(--gold);font-weight:600}
-.cart-overlay{position:fixed;inset:0;background:rgba(13,27,75,.65);z-index:400;opacity:0;pointer-events:none;transition:opacity .28s}
+.cart-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.60);
+  z-index:400;opacity:0;pointer-events:none;
+  transition:opacity .28s;
+  backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
 .cart-overlay.open{opacity:1;pointer-events:auto}
-.cart-drawer{position:fixed;top:0;right:0;bottom:0;width:min(360px,92vw);background:var(--white);z-index:410;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-4px 0 32px rgba(13,27,75,.25)}
+.cart-drawer{
+  position:fixed;top:0;right:0;bottom:0;
+  width:min(420px,100vw);
+  background:var(--bg);
+  z-index:410;
+  transform:translateX(100%);
+  transition:transform .30s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;
+  box-shadow:-8px 0 40px rgba(0,0,0,.20);
+  max-height:100vh;
+  overflow:hidden;
+}
 .cart-drawer.open{transform:translateX(0)}
-.cart-hdr{background:var(--g-navy);padding:18px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:2px solid rgba(201,162,39,.30)}
-.cart-hdr-title{font-size:15px;font-weight:700;color:var(--white);display:flex;align-items:center;gap:8px}
-.cart-close{width:32px;height:32px;background:rgba(255,255,255,.15);border:none;border-radius:50%;color:var(--white);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.cart-body{flex:1;overflow-y:auto;padding:14px}
-.cart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;height:200px;text-align:center}
-.cart-empty-icon{font-size:52px;opacity:.28}
-.cart-empty-text{font-size:13px;font-weight:600;color:var(--navy)}
-.cart-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--gray-lt);align-items:flex-start}
-.cart-item-img{width:54px;height:54px;background:var(--bg);border:1px solid var(--gray-lt);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden;flex-shrink:0}
-.cart-item-img img{width:100%;height:100%;object-fit:contain}
+/* Header */
+.cart-hdr{
+  background:var(--navy);
+  padding:0 16px;
+  height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+  border-bottom:3px solid var(--gold);
+}
+.cart-hdr-title{
+  font-size:15px;font-weight:700;color:var(--white);
+  display:flex;align-items:center;gap:10px;
+}
+.cart-hdr-count{
+  background:var(--g-gold);color:var(--navy);
+  font-size:11px;font-weight:800;
+  padding:2px 8px;border-radius:20px;
+}
+.cart-close{
+  width:36px;height:36px;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.20);
+  border-radius:50%;color:var(--white);font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background .15s;
+}
+.cart-close:hover{background:rgba(255,255,255,.25)}
+/* Body — scrollável */
+.cart-body{
+  flex:1;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:0;
+  -webkit-overflow-scrolling:touch;
+  scroll-behavior:smooth;
+  min-height:0;
+}
+.cart-body::-webkit-scrollbar{width:4px}
+.cart-body::-webkit-scrollbar-track{background:transparent}
+.cart-body::-webkit-scrollbar-thumb{background:var(--gray-lt);border-radius:2px}
+/* Empty */
+.cart-empty{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:12px;
+  padding:60px 20px;text-align:center;
+}
+.cart-empty-icon{font-size:64px;opacity:.20}
+.cart-empty-title{font-size:16px;font-weight:700;color:var(--navy)}
+.cart-empty-sub{font-size:13px;color:var(--gray-md);max-width:200px;line-height:1.5}
+.cart-empty-btn{
+  height:44px;padding:0 24px;
+  background:var(--navy);color:var(--white);
+  font-family:var(--font);font-size:12px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  border:none;border-radius:var(--r);cursor:pointer;
+  transition:background .15s;margin-top:8px;
+}
+.cart-empty-btn:hover{background:var(--navy-md)}
+/* Items */
+.cart-items-section{padding:0 16px}
+.cart-item{
+  display:flex;gap:12px;
+  padding:14px 0;
+  border-bottom:1px solid var(--gray-lt);
+  align-items:flex-start;
+}
+.cart-item:last-child{border-bottom:none}
+.cart-item-img{
+  width:70px;height:70px;flex-shrink:0;
+  background:var(--white);
+  border:1px solid var(--gray-lt);
+  border-radius:var(--r);
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;overflow:hidden;
+}
+.cart-item-img img{width:100%;height:100%;object-fit:contain;padding:4px}
 .cart-item-info{flex:1;min-width:0}
-.cart-item-name{font-size:12px;font-weight:700;color:var(--navy);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:4px}
-.cart-item-price{font-size:14px;font-weight:800;color:var(--navy)}
-.qty-row{display:flex;align-items:center;gap:8px;margin-top:6px}
-.qty-btn{width:26px;height:26px;border:1.5px solid var(--gray-lt);border-radius:6px;background:none;font-size:16px;font-weight:700;color:var(--navy);display:flex;align-items:center;justify-content:center;transition:border-color .15s;cursor:pointer}
-.qty-btn:hover{border-color:var(--gold)}
-.qty-val{font-size:13px;font-weight:700;color:var(--navy);min-width:20px;text-align:center}
-.cart-item-del{background:none;border:none;color:var(--gray-md);font-size:16px;padding:2px;transition:color .15s;cursor:pointer;flex-shrink:0}
+.cart-item-cat{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-md);margin-bottom:3px}
+.cart-item-name{
+  font-size:13px;font-weight:600;color:var(--navy);
+  line-height:1.4;margin-bottom:6px;
+  display:-webkit-box;-webkit-line-clamp:2;
+  -webkit-box-orient:vertical;overflow:hidden;
+}
+.cart-item-sku{font-size:10px;color:var(--gray-md);margin-bottom:8px}
+.cart-item-bottom{display:flex;align-items:center;justify-content:space-between}
+.cart-item-price{font-size:16px;font-weight:800;color:var(--navy)}
+.cart-item-unit{font-size:10px;color:var(--gray-md);margin-top:1px}
+.qty-row{display:flex;align-items:center;gap:0;border:1px solid var(--gray-lt);border-radius:var(--r);overflow:hidden}
+.qty-btn{
+  width:32px;height:32px;background:var(--bg);border:none;
+  font-size:18px;font-weight:700;color:var(--navy);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background .15s;flex-shrink:0;
+}
+.qty-btn:hover{background:var(--gray-lt)}
+.qty-val{
+  width:36px;height:32px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:var(--navy);
+  border-left:1px solid var(--gray-lt);
+  border-right:1px solid var(--gray-lt);
+}
+.cart-item-del{
+  background:none;border:none;
+  color:var(--gray-md);font-size:14px;
+  cursor:pointer;transition:color .15s;
+  padding:4px;margin-left:8px;
+  display:flex;align-items:center;
+}
 .cart-item-del:hover{color:var(--danger)}
-.cart-foot{padding:14px;border-top:2px solid var(--gold);flex-shrink:0}
-.cart-total-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
-.cart-total-label{font-size:12px;color:var(--gray-md)}
-.cart-total-val{font-size:24px;font-weight:800;color:var(--navy)}
-.btn-checkout{width:100%;height:50px;background:var(--g-gold);color:var(--navy);font-family:var(--font);font-size:12px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;border:none;border-radius:var(--r);box-shadow:var(--sh-gold);transition:opacity .18s,transform .12s;cursor:pointer}
-.btn-checkout:hover{opacity:.88;transform:translateY(-1px)}
-.cart-note{font-size:10px;color:var(--gray-md);text-align:center;margin-top:8px}
+/* Frete section */
+.cart-frete-section{
+  padding:14px 16px;
+  background:var(--white);
+  border-top:1px solid var(--gray-lt);
+  border-bottom:1px solid var(--gray-lt);
+}
+.cart-frete-title{
+  font-size:12px;font-weight:700;color:var(--navy);
+  margin-bottom:10px;
+  display:flex;align-items:center;gap:6px;
+  text-transform:uppercase;letter-spacing:.06em;
+}
+.cart-cep-form{display:flex;height:42px;margin-bottom:10px;border-radius:var(--r);overflow:hidden;border:1.5px solid var(--gray-lt);transition:border-color .2s}
+.cart-cep-form:focus-within{border-color:var(--navy)}
+.cart-cep-input{
+  flex:1;border:none;outline:none;
+  padding:0 12px;
+  font-family:var(--font);font-size:14px;font-weight:600;
+  color:var(--navy);background:var(--white);
+}
+.cart-cep-btn{
+  width:90px;background:var(--navy);color:var(--white);
+  border:none;font-family:var(--font);
+  font-size:11px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;
+  cursor:pointer;transition:background .15s;flex-shrink:0;
+}
+.cart-cep-btn:hover{background:var(--navy-md)}
+.cart-frete-opts{display:flex;flex-direction:column;gap:6px}
+.frete-opt{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 12px;
+  border:1.5px solid var(--gray-lt);
+  border-radius:var(--r);cursor:pointer;
+  transition:all .18s;
+  background:var(--white);
+}
+.frete-opt:hover{border-color:var(--navy-lt);background:rgba(13,27,75,.03)}
+.frete-opt.ativo{border-color:var(--navy);background:rgba(13,27,75,.04)}
+.frete-radio{
+  width:18px;height:18px;border-radius:50%;
+  border:2px solid var(--gray-lt);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:border-color .15s;
+}
+.frete-opt.ativo .frete-radio{border-color:var(--navy)}
+.frete-radio-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--navy);opacity:0;transition:opacity .15s;
+}
+.frete-opt.ativo .frete-radio-dot{opacity:1}
+.frete-opt-info{flex:1}
+.frete-opt-nome{font-size:13px;font-weight:700;color:var(--navy)}
+.frete-opt-prazo{font-size:11px;color:var(--gray-md);margin-top:1px}
+.frete-opt-preco{font-size:15px;font-weight:800;color:var(--navy);flex-shrink:0}
+.frete-opt-preco.gratis{color:var(--success)}
+/* Resumo */
+.cart-resumo{padding:14px 16px;background:var(--white);border-top:1px solid var(--gray-lt)}
+.cart-resumo-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:4px 0;font-size:13px;
+}
+.cart-resumo-label{color:var(--gray-md)}
+.cart-resumo-val{font-weight:600;color:var(--gray-dk)}
+.cart-resumo-row.frete .cart-resumo-val{color:var(--success)}
+.cart-resumo-total{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:12px 0 0;
+  margin-top:8px;
+  border-top:2px solid var(--gray-lt);
+}
+.cart-resumo-total-label{font-size:13px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.04em}
+.cart-resumo-total-val{font-size:26px;font-weight:900;color:var(--navy)}
+.cart-resumo-install{font-size:11px;color:var(--gold-dk);text-align:right}
+/* Footer fixo */
+.cart-foot{
+  padding:12px 16px 16px;
+  background:var(--white);
+  border-top:1px solid var(--gray-lt);
+  flex-shrink:0;
+}
+.btn-checkout{
+  width:100%;height:52px;
+  background:var(--g-gold);color:var(--navy);
+  font-family:var(--font);font-size:13px;font-weight:800;
+  letter-spacing:.10em;text-transform:uppercase;
+  border:none;border-radius:var(--r);
+  box-shadow:var(--sh-gold);
+  transition:opacity .18s,transform .12s;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-checkout:hover{opacity:.90;transform:translateY(-1px)}
+.cart-secure{
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  margin-top:10px;
+}
+.cart-secure-item{
+  display:flex;align-items:center;gap:4px;
+  font-size:10px;color:var(--gray-md);font-weight:500;
+}
+.cart-subtotal-row{display:flex;justify-content:space-between;font-size:12px;color:var(--gray-md);padding:4px 0}
+.cart-subtotal-row.frete{color:var(--navy-md)}
 .pdp-breadcrumb{padding:10px 16px;background:var(--white);border-bottom:1px solid var(--gray-lt);font-size:11px;color:var(--gray-md);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .pdp-breadcrumb a{color:var(--navy);font-weight:600;text-decoration:none;transition:color .15s}
 .pdp-breadcrumb a:hover{color:var(--gold)}
@@ -778,41 +984,70 @@ button{cursor:pointer;font-family:var(--font);border:none;background:none}
 </nav>
 
 <div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
-<aside class="cart-drawer" id="cart-drawer">
-  <div class="cart-hdr"><div class="cart-hdr-title">🛒 Meu Carrinho</div><button class="cart-close" onclick="toggleCart()">✕</button></div>
-  <div class="cart-body" id="cart-body"></div>
-  <div class="cart-foot" id="cart-foot" style="display:none">
+<aside class="cart-drawer" id="cart-drawer" role="dialog" aria-label="Carrinho de compras">
 
-    <!-- SEÇÃO FRETE NO CARRINHO -->
-    <div class="cart-frete-section">
-      <div class="cart-frete-title">🚚 Calcular frete</div>
+  <!-- HEADER -->
+  <div class="cart-hdr">
+    <div class="cart-hdr-title">
+      🛒 Meu Carrinho
+      <span class="cart-hdr-count" id="cart-hdr-count">0 itens</span>
+    </div>
+    <button class="cart-close" onclick="toggleCart()" aria-label="Fechar carrinho">✕</button>
+  </div>
+
+  <!-- BODY SCROLLÁVEL -->
+  <div class="cart-body" id="cart-body">
+
+    <!-- Itens (preenchido por JS) -->
+    <div class="cart-items-section" id="cart-items-list"></div>
+
+    <!-- FRETE -->
+    <div class="cart-frete-section" id="cart-frete-section" style="display:none">
+      <div class="cart-frete-title">🚚 Calcular frete e prazo</div>
       <div class="cart-cep-form">
-        <input class="cart-cep-input" id="cart-cep" type="text" placeholder="Digite seu CEP"
-               maxlength="9" inputmode="numeric" oninput="maskCartCep(this)">
+        <input class="cart-cep-input" id="cart-cep" type="text"
+               placeholder="Digite seu CEP"
+               maxlength="9" inputmode="numeric"
+               oninput="maskCartCep(this)"
+               onkeydown="if(event.key==='Enter')calcCartFrete()">
         <button class="cart-cep-btn" onclick="calcCartFrete()">CALCULAR</button>
       </div>
       <div id="cart-frete-opts" class="cart-frete-opts"></div>
     </div>
 
-    <!-- RESUMO DE VALORES -->
-    <div style="padding:8px 0;border-top:1px solid var(--gray-lt)">
-      <div class="cart-subtotal-row"><span>Subtotal</span><span id="cart-subtotal-val">R$ 0,00</span></div>
-      <div class="cart-subtotal-row frete" id="cart-frete-row" style="display:none">
-        <span id="cart-frete-label">Frete</span>
-        <span id="cart-frete-val">—</span>
+    <!-- RESUMO -->
+    <div class="cart-resumo" id="cart-resumo" style="display:none">
+      <div class="cart-resumo-row">
+        <span class="cart-resumo-label">Subtotal</span>
+        <span class="cart-resumo-val" id="cart-subtotal-val">R$ 0,00</span>
+      </div>
+      <div class="cart-resumo-row frete" id="cart-frete-row" style="display:none">
+        <span class="cart-resumo-label" id="cart-frete-label">Frete</span>
+        <span class="cart-resumo-val" id="cart-frete-val">—</span>
+      </div>
+      <div class="cart-resumo-total">
+        <span class="cart-resumo-total-label">Total</span>
+        <div style="text-align:right">
+          <div class="cart-resumo-total-val" id="cart-total">R$ 0,00</div>
+          <div class="cart-resumo-install" id="cart-install-hint"></div>
+        </div>
       </div>
     </div>
 
-    <!-- TOTAL -->
-    <div class="cart-total-row">
-      <span class="cart-total-label">Total</span>
-      <span class="cart-total-val" id="cart-total">R$ 0,00</span>
-    </div>
-
-    <!-- BOTÃO CHECKOUT -->
-    <button class="btn-checkout" onclick="checkout()">💳 FINALIZAR PEDIDO</button>
-    <div class="cart-note">🔒 Pagamento seguro · Cartão · PIX · Boleto</div>
   </div>
+
+  <!-- FOOTER FIXO -->
+  <div class="cart-foot" id="cart-foot" style="display:none">
+    <button class="btn-checkout" onclick="checkout()">
+      🔒 FINALIZAR COMPRA
+    </button>
+    <div class="cart-secure">
+      <div class="cart-secure-item">🔒 SSL Seguro</div>
+      <div class="cart-secure-item">💳 Cartão · PIX · Boleto</div>
+      <div class="cart-secure-item">↩️ 30 dias p/ troca</div>
+    </div>
+  </div>
+
 </aside>
 
 <div class="menu-overlay" id="menu-overlay" onclick="toggleMenu()"></div>
@@ -893,29 +1128,91 @@ function addToCart(id){
 function removeFromCart(id){cart=cart.filter(x=>String(x.id)!==String(id));saveCart();}
 function changeQty(id,d){const it=cart.find(x=>String(x.id)===String(id));if(!it)return;it.qty=Math.max(1,it.qty+d);saveCart();}
 function updateCartUI(){
- const c=cart.reduce((s,i)=>s+i.qty,0),t=cart.reduce((s,i)=>s+i.price*i.qty,0);
- ['cart-badge','bnav-badge'].forEach(b=>{const el=document.getElementById(b);if(el)el.textContent=c;});
- const te=document.getElementById('cart-total');if(te)te.textContent='R$ '+t.toFixed(2).replace('.',',');
- const ft=document.getElementById('cart-foot');if(ft)ft.style.display=cart.length?'block':'none';
- const bd=document.getElementById('cart-body');if(!bd)return;
- if(!cart.length){bd.innerHTML='<div class="cart-empty"><div class="cart-empty-icon">🛒</div><div class="cart-empty-text">Carrinho vazio</div><div style="font-size:12px;color:var(--gray-md)">Adicione produtos para continuar</div></div>';return;}
- bd.innerHTML=cart.map(i=>'<div class="cart-item"><div class="cart-item-img">'+(i.foto&&typeof i.foto==='string'&&i.foto.includes('<img')?i.foto:i.icon)+'</div><div class="cart-item-info"><div class="cart-item-name">'+i.name+'</div><div class="cart-item-price">R$ '+(i.price*i.qty).toFixed(2).replace('.',',')+'</div><div class="qty-row"><button class="qty-btn" onclick="changeQty(\''+i.id+'\',-1)">−</button><span class="qty-val">'+i.qty+'</span><button class="qty-btn" onclick="changeQty(\''+i.id+'\',1)">+</button></div></div><button class="cart-item-del" onclick="removeFromCart(\''+i.id+'\')">✕</button></div>').join('');
+  const count=cart.reduce((s,i)=>s+i.qty,0);
+  const subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
+
+  // Badges
+  ['cart-badge','bnav-badge'].forEach(bid=>{
+    const el=document.getElementById(bid);if(el)el.textContent=count;
+  });
+  const hdrCount=document.getElementById('cart-hdr-count');
+  if(hdrCount)hdrCount.textContent=count+' '+(count===1?'item':'itens');
+
+  // Foot, frete, resumo visibilidade
+  const foot=document.getElementById('cart-foot');
+  const freteSection=document.getElementById('cart-frete-section');
+  const resumo=document.getElementById('cart-resumo');
+  if(foot)foot.style.display=cart.length?'block':'none';
+  if(freteSection)freteSection.style.display=cart.length?'block':'none';
+  if(resumo)resumo.style.display=cart.length?'block':'none';
+
+  // Lista de itens
+  const listEl=document.getElementById('cart-items-list');
+  if(!listEl)return;
+
+  if(!cart.length){
+    listEl.innerHTML='<div class="cart-empty"><div class="cart-empty-icon">🛒</div><div class="cart-empty-title">Seu carrinho está vazio</div><div class="cart-empty-sub">Adicione produtos para continuar comprando</div><button class="cart-empty-btn" onclick="toggleCart()">VER PRODUTOS</button></div>';
+    cartFreteSelected=null;
+    updateCartTotals();
+    return;
+  }
+
+  listEl.innerHTML='<div class="cart-items-section">'+cart.map(i=>{
+    const imgHtml=(i.foto&&typeof i.foto==='string'&&i.foto.includes('<img'))?i.foto:('<span style="font-size:28px">'+i.icon+'</span>');
+    const unitPrice='R$ '+i.price.toFixed(2).replace('.',',');
+    const totalPrice='R$ '+(i.price*i.qty).toFixed(2).replace('.',',');
+    return '<div class="cart-item">'
+      +'<div class="cart-item-img">'+imgHtml+'</div>'
+      +'<div class="cart-item-info">'
+        +'<div class="cart-item-cat">'+i.category+'</div>'
+        +'<div class="cart-item-name">'+i.name+'</div>'
+        +'<div class="cart-item-sku">SKU: '+i.sku+'</div>'
+        +'<div class="cart-item-bottom">'
+          +'<div>'
+            +'<div class="cart-item-price">'+totalPrice+'</div>'
+            +'<div class="cart-item-unit">'+unitPrice+' / un.</div>'
+          +'</div>'
+          +'<div style="display:flex;align-items:center;gap:6px">'
+            +'<div class="qty-row">'
+              +'<button class="qty-btn" onclick="changeQty(\''+i.id+'\',- 1)" aria-label="Diminuir">−</button>'
+              +'<span class="qty-val">'+i.qty+'</span>'
+              +'<button class="qty-btn" onclick="changeQty(\''+i.id+'\',1)" aria-label="Aumentar">+</button>'
+            +'</div>'
+            +'<button class="cart-item-del" onclick="removeFromCart(\''+i.id+'\')" aria-label="Remover">🗑️</button>'
+          +'</div>'
+        +'</div>'
+      +'</div>'
+    +'</div>';
+  }).join('')+'</div>';
+
+  updateCartTotals();
 }
-function toggleCart(){const d=document.getElementById('cart-drawer'),o=document.getElementById('cart-overlay');const op=d.classList.toggle('open');o.classList.toggle('open',op);document.body.style.overflow=op?'hidden':'';}
+function toggleCart(){
+  const d=document.getElementById('cart-drawer');
+  const o=document.getElementById('cart-overlay');
+  const open=d.classList.toggle('open');
+  o.classList.toggle('open',open);
+  document.body.style.overflow=open?'hidden':'';
+  if(open){
+    // Scroll para o topo quando abrir
+    const body=document.getElementById('cart-body');
+    if(body)body.scrollTop=0;
+  }
+}
 
 async function checkout(){
  if(!cart.length){toast('Adicione produtos ao carrinho!');return;}
  if(!cartFreteSelected){
-   // Se não escolheu frete, scrollar para o campo de CEP
-   const cepInput = document.getElementById('cart-cep');
-   if(cepInput){
-     cepInput.focus();
-     cepInput.scrollIntoView({behavior:'smooth'});
-     toast('⚠️ Calcule e escolha o frete antes de finalizar');
-     return;
-   }
- }
- if(!cart.length){toast('Adicione produtos ao carrinho!');return;}
+    const cepInput=document.getElementById('cart-cep');
+    if(cepInput){
+      cepInput.focus();
+      const freteSection=document.getElementById('cart-frete-section');
+      if(freteSection)freteSection.scrollIntoView({behavior:'smooth'});
+    }
+    toast('⚠️ Informe o CEP e escolha o frete');
+    return;
+  }
+  if(!cart.length){toast('Adicione produtos ao carrinho!');return;}
  const btn=document.querySelector('.btn-checkout');if(btn){btn.textContent='⏳ Aguarde...';btn.disabled=true;}
  try{
   const items=cart.map(i=>({title:i.name.slice(0,60),quantity:i.qty,unit_price:parseFloat(i.price.toFixed(2)),currency_id:'BRL'}));
