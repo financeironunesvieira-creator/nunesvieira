@@ -6,10 +6,9 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Metodo nao permitido' });
 
   const { to } = req.body || {};
-  const cepDestino = (to?.postal_code || '').replace(/\D/g,'');
-  const cepOrigem = '18200000';
+  const cep = (to?.postal_code || '').replace(/\D/g,'');
 
-  if (!cepDestino || cepDestino.length < 8) {
+  if (!cep || cep.length < 8) {
     return res.status(400).json({ error: 'CEP invalido' });
   }
 
@@ -17,58 +16,49 @@ export default async function handler(req, res) {
   const ME_TOKEN = process.env.ME_TOKEN;
   if (ME_TOKEN && ME_TOKEN.startsWith('eyJ')) {
     try {
-      const meResp = await fetch('https://melhorenvio.com.br/api/v2/me/shipment/calculate', {
+      const r = await fetch('https://melhorenvio.com.br/api/v2/me/shipment/calculate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + ME_TOKEN,
           'Accept': 'application/json',
-          'User-Agent': 'NunesVieira/1.0 (ecommerce@nunesvieira.com.br)'
+          'User-Agent': 'NunesVieira/1.0 (ecommerce@nudesvieira.com.br)'
         },
-        body: JSON.stringify(req.body)
+        body: JSON.stringify(req.body),
+        signal: AbortSignal.timeout(6000)
       });
-      if (meResp.ok) {
-        const meData = await meResp.json();
-        const ativos = (Array.isArray(meData) ? meData : []).filter(s => !s.error && s.price);
-        if (ativos.length > 0) return res.status(200).json(meData);
+      if (r.ok) {
+        const d = await r.json();
+        const ok = (Array.isArray(d) ? d : []).filter(s => !s.error && s.price);
+        if (ok.length > 0) return res.status(200).json(d);
       }
-    } catch (e) {
-      console.log('ME falhou:', e.message);
-    }
+    } catch(e) { console.log('ME:', e.message); }
   }
 
-  // Fallback Correios API publica
-  const resultados = [];
-  try {
-    for (const servico of ['04014','04510']) {
-      try {
-        const url = `https://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?nCdEmpresa=&sDsSenha=&sCepOrigem=${cepOrigem}&sCepDestino=${cepDestino}&nVlPeso=1&nCdFormato=1&nVlComprimento=20&nVlAltura=20&nVlLargura=20&nVlDiametro=0&sCdMaoPropria=N&nVlValorDeclarado=50&sCdAvisoRecebimento=N&nCdServico=${servico}&nVlDiametro=0&StrRetorno=xml&nIndicaCalculo=3`;
-        const resp = await fetch(url, { signal: AbortSignal.timeout(5000) });
-        const text = await resp.text();
-        const valor = text.match(/<Valor>([\d,]+)<\/Valor>/)?.[1]?.replace(',','.');
-        const prazo = text.match(/<PrazoEntrega>(\d+)<\/PrazoEntrega>/)?.[1];
-        if (valor && parseFloat(valor) > 0) {
-          resultados.push({ id:servico, name:servico==='04014'?'SEDEX':'PAC', company:{name:'Correios'}, price:valor, delivery_time:prazo||'5', error:null });
-        }
-      } catch(e) {}
-    }
-  } catch(e) {}
-
-  // Jadlog estimado
-  const n = parseInt(cepDestino.slice(0,2));
+  // Tabela por região — instantâneo, sem API externa
+  const n = parseInt(cep.slice(0,2));
   const r = n>=13&&n<=19 ? 0 : n>=1&&n<=9 ? 1 : 2;
-  const jP = ['18.00','22.00','28.00'][r];
-  const jD = ['4','3','7'][r];
-  resultados.push({ id:'jadlog', name:'Jadlog Package', company:{name:'Jadlog'}, price:jP, delivery_time:jD, error:null });
 
-  if (resultados.length > 0) return res.status(200).json(resultados);
+  const tabela = [
+    // SP Interior
+    [
+      { id:'jadlog', name:'Jadlog Package', company:{name:'Jadlog'}, price:'17.90', delivery_time:'4', error:null },
+      { id:'04510', name:'PAC', company:{name:'Correios'}, price:'19.80', delivery_time:'6', error:null },
+      { id:'04014', name:'SEDEX', company:{name:'Correios'}, price:'27.50', delivery_time:'2', error:null },
+    ],
+    // SP Capital
+    [
+      { id:'jadlog-com', name:'Jadlog .COM', company:{name:'Jadlog'}, price:'21.90', delivery_time:'3', error:null },
+      { id:'04510', name:'PAC', company:{name:'Correios'}, price:'23.80', delivery_time:'5', error:null },
+      { id:'04014', name:'SEDEX', company:{name:'Correios'}, price:'34.50', delivery_time:'1', error:null },
+    ],
+    // Outros estados
+    [
+      { id:'jadlog', name:'Jadlog Package', company:{name:'Jadlog'}, price:'27.90', delivery_time:'7', error:null },
+      { id:'04510', name:'PAC', company:{name:'Correios'}, price:'29.80', delivery_time:'10', error:null },
+      { id:'04014', name:'SEDEX', company:{name:'Correios'}, price:'47.50', delivery_time:'4', error:null },
+    ]
+  ];
 
-  // Tabela final
-  const pP = ['20.00','24.00','30.00'][r];
-  const sP = ['28.00','35.00','48.00'][r];
-  return res.status(200).json([
-    { id:'jadlog', name:'Jadlog Package', company:{name:'Jadlog'}, price:jP, delivery_time:jD, error:null },
-    { id:'04510', name:'PAC', company:{name:'Correios'}, price:pP, delivery_time:['6','5','10'][r], error:null },
-    { id:'04014', name:'SEDEX', company:{name:'Correios'}, price:sP, delivery_time:['2','1','4'][r], error:null },
-  ]);
+  return res.status(200).json(tabela[r]);
 }
